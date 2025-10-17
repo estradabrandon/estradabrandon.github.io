@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Material de camión – Pull&Bear</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --fg:#ffffff; --muted:#eaeaea; --pill:#ffffff; --pill-txt:#000; --accent:#b0f46f; --shadow:rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--fg); font-family:"Playfair Display", serif; overflow-x:hidden;
+      background:#111;
+    }
+
+    /* BACKGROUND */
+    .bg{
+      position:fixed; inset:0; z-index:-2; overflow:hidden;
+    }
+    .bg img{
+      width:120%; height:120%; object-fit:cover; filter:blur(5px) brightness(.55); transform:scale(1.05);
+    }
+    .bg::after{ /* ligera viñeta */
+      content:""; position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(0,0,0,.1) 0%, rgba(0,0,0,.6) 70%);
+    }
+
+    /* HEADER */
+    .topbar{position:fixed; left:20px; top:20px; right:20px; display:flex; align-items:center; justify-content:space-between; z-index:5}
+    .brand{display:flex; gap:14px; align-items:center}
+    .brand img{height:44px; filter:drop-shadow(0 2px 6px var(--shadow));}
+    .code{font-family:Inter, system-ui, Arial; font-weight:700; letter-spacing:1px; opacity:.9}
+
+    /* TITLE */
+    .title{ font-size: clamp(34px, 6vw, 92px); line-height:1.03; text-align:center; margin:100px 16px 28px; text-shadow: 0 6px 24px rgba(0,0,0,.45);} 
+
+    /* LAYOUT */
+    .grid{display:grid; grid-template-columns: 1fr 1fr; gap:18px; place-items:center; padding:12px 0 80px}
+    @media (max-width:480px){ .grid{gap:12px} }
+    @media (min-width:992px){ .grid{gap:42px} }
+    @media (min-width:768px){ .grid{gap:36px}}
+    @media (min-width:992px){ .grid{grid-template-columns: 1fr 1fr; gap:42px} }
+    @media (min-width:980px){ .grid{grid-template-columns: 1fr 1fr; gap:42px} }
+
+    .card{ width:clamp(240px, 46vw, 520px); min-height:560px; position:relative; border-radius:14px; overflow:hidden; background:rgba(255,255,255,.07); backdrop-filter: blur(2px); box-shadow: 0 12px 40px rgba(0,0,0,.35);} 
+    @media (min-width:768px){ .card{min-height:620px}}
+    .photo{position:absolute; inset:0; display:grid; place-items:center}
+    .photo img{width:100%; height:100%; object-fit:cover; filter:blur(1px) saturate(.9) brightness(.95);} /* leve difuminado como el mockup */
+
+    .panel{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:20px}
+
+    /* Pills y etiquetas */
+    .pill{font-family:Playfair Display, serif; font-weight:700; font-size: clamp(18px, 2.2vw, 28px); color:#000; background:var(--pill); border-radius:999px; padding:6px 22px; box-shadow:0 10px 30px rgba(0,0,0,.25);}  
+
+    .row{display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:16px}
+
+    .circle{display:grid; place-items:center; width:72px; height:44px; border-radius:999px; background:#fff; color:#000; font-family:Playfair Display, serif; font-size:28px; font-weight:700; box-shadow:0 12px 28px rgba(0,0,0,.25)}
+    @media (max-width:380px){ .circle{width:64px; height:40px; font-size:24px} }
+
+    .spacer{flex:1}
+
+    .inputWrap{display:flex; flex-direction:column; gap:10px; width:min(360px, 80%)}
+    .inputWrap label{font-family:Inter, system-ui; font-weight:600; color:#000; background:#fff; border-radius:999px; padding:10px 18px; text-align:center; box-shadow:0 10px 26px rgba(0,0,0,.25)}
+    .inputWrap input{border:none; border-radius:999px; padding:12px 18px; text-align:center; font-size:18px; outline:0; box-shadow:0 10px 26px rgba(0,0,0,.25)}
+
+    .btn{cursor:pointer; background:var(--accent); color:#111; font-family:Inter, system-ui; font-weight:800; border:none; border-radius:999px; padding:10px 22px; box-shadow:0 12px 34px rgba(0,0,0,.3)}
+    .btn:active{transform:translateY(1px)}
+
+    .footLabel{font-size: clamp(34px, 5vw, 72px); text-shadow: 0 6px 18px rgba(0,0,0,.45); margin-top:8px; text-align:center}
+
+  </style>
+</head>
+<body>
+  <div class="bg"><img alt="Fondo" src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npDQYuEjv4EO_3O1IvDLqZmVao04EFwANq0i1WXk39zfBz-xaJ-ZGoe5iwmxXEba8CcJ26lJMOb5wIARnWLPgTCNIvcOpoMz5473epgQHZnbflIQg9_FCn1Ycgj_li9ymQkKKe6=s1360-w1360-h1020-rw"></div>
+
+  <div class="topbar">
+    <div class="brand">
+      <img alt="Pull&Bear" src="https://blackdevice.com/wp-content/uploads/2025/03/logo-pull-bear.png"/>
+    </div>
+    <div class="code">5092</div>
+  </div>
+
+  <h1 class="title">Material de camion</h1>
+
+  <main class="container-xxl px-3 px-md-4">
+  <section class="grid">
+
+    <!-- SEÑORA -->
+    <article class="card" id="card-senora">
+      <div class="photo">
+        <img alt="Señora" src="https://static.pullandbear.net/2/photos/2025/I/0/1/p/7710/381/800/7710381800_4_1_8.jpg?t=1758030647723"/>
+      </div>
+      <div class="panel">
+        <div class="row"><div class="title" style="color: white;">Plegables</div></div>
+        <div class="row">
+          <div class="pill">Buffer</div>
+          <div class="circle" id="senora-buffer">0</div>
+        </div>
+        <div class="row">
+          <div class="pill">Piso</div>
+          <div class="circle" id="senora-piso">0</div>
+        </div>
+        <div class="spacer"></div>
+        <div class="inputWrap"> 
+          <input id="senora-input" inputmode="numeric" placeholder="Unidades totales"/>
+        </div>
+        <div style="margin-top:10px"><button class="btn" data-action="calc" data-side="senora">Calcular</button></div>
+      </div>
+      <div class="footLabel">Señora</div>
+    </article>
+
+    <!-- CABALLERO -->
+    <article class="card" id="card-caballero">
+      <div class="photo">
+        <img alt="Caballero" src="https://static.pullandbear.net/assets/public/9b75/a0b1/eea445c29c7b/ff19afe46f50/07700513716-A7M/07700513716-A7M.jpg?ts=1755527695357&w=1050&f=auto"/>
+      </div>
+      <div class="panel">
+        <div class="row"><div class="title" style="color: white;">Plegables</div></div>
+        <div class="row">
+          <div class="pill">Buffer</div>
+          <div class="circle" id="caballero-buffer">0</div>
+        </div>
+        <div class="row">
+          <div class="pill">Piso</div>
+          <div class="circle" id="caballero-piso">0</div>
+        </div>
+        <div class="spacer"></div>
+        <div class="inputWrap">
+          <input id="caballero-input" inputmode="numeric" placeholder="Unidades Totales"/>
+        </div>
+        <div style="margin-top:10px"><button class="btn" data-action="calc" data-side="caballero">Calcular</button></div>
+      </div>
+      <div class="footLabel">Caballero</div>
+    </article>
+
+  </section>
+</main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function redondear(valor){
+      // Redondeo estándar al entero más cercano.
+      return Math.round(Number(valor));
+    }
+
+    function calcularSenora(unidades){
+      const u = Number(unidades)||0;
+      const buffer = (u*0.6)/25/5;   // (unidades *.6)/(25)/(5)
+      const piso   = (u*0.4)/25/4;   // (unidades *.4)/(25)/(4)
+      return {buffer:redondear(buffer), piso:redondear(piso)};
+    }
+    function calcularCaballero(unidades){
+      const u = Number(unidades)||0;
+      const buffer = (u*0.6)/20/5;   // (unidades *.6)/(20)/(5)
+      const piso   = (u*0.4)/20/4;   // (unidades *.4)/(20)/(4)
+      return {buffer:redondear(buffer), piso:redondear(piso)};
+    }
+
+    function actualizar(side, vals){
+      document.getElementById(`${side}-buffer`).textContent = isFinite(vals.buffer)? vals.buffer : 0;
+      document.getElementById(`${side}-piso`).textContent   = isFinite(vals.piso)? vals.piso : 0;
+    }
+
+    document.querySelectorAll('[data-action="calc"]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const side = btn.dataset.side; // "senora" | "caballero"
+        const input = document.getElementById(`${side}-input`);
+        const unidades = Number((input.value||'').toString().replace(/[^0-9.\-]/g,''));
+        if(!unidades || unidades < 0){
+          actualizar(side, {buffer:0, piso:0});
+          return;
+        }
+        if(side==='senora'){
+          actualizar('senora', calcularSenora(unidades));
+        }else{
+          actualizar('caballero', calcularCaballero(unidades));
+        }
+      });
+    });
+  </script>
+</body>
+</html>
