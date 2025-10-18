@@ -4,15 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Material de camión – Pull&Bear</title>
-
-  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <style>
     :root{
       --fg:#ffffff; --muted:#eaeaea; --pill:#ffffff; --pill-txt:#000; --accent:#b0f46f; --shadow:rgba(0,0,0,.25);
@@ -21,8 +17,8 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; color:var(--fg); font-family:"Playfair Display", serif; overflow-x:hidden; background:#111;
-      -webkit-tap-highlight-color: transparent;
+      margin:0; color:var(--fg); font-family:"Playfair Display", serif; overflow-x:hidden;
+      background:#111; -webkit-tap-highlight-color:transparent;
     }
 
     /* BACKGROUND */
@@ -34,101 +30,85 @@
     .topbar{
       position:fixed; left:12px; right:12px; top:calc(12px + var(--safe-top));
       display:flex; align-items:center; justify-content:space-between; z-index:5;
-      padding:8px 10px; border-radius:12px; backdrop-filter: blur(6px);
-      background:rgba(0,0,0,.25); box-shadow:0 8px 24px rgba(0,0,0,.35);
     }
-    .brand{display:flex; gap:10px; align-items:center}
-    .brand img{height:32px; filter:drop-shadow(0 2px 6px var(--shadow));}
-    .code{font-family:Inter, system-ui, Arial; font-weight:700; letter-spacing:.5px; opacity:.95; font-size:14px}
+    .brand{display:flex; gap:14px; align-items:center}
+    .brand img{height:36px; filter:drop-shadow(0 2px 6px var(--shadow));}
+    .code{font-family:Inter, system-ui, Arial; font-weight:700; letter-spacing:1px; opacity:.9; font-size:14px}
 
-    /* TITULAR */
-    .pageTitle{
-      font-size: clamp(26px, 7vw, 44px);
-      line-height:1.05; text-align:center;
-      margin: calc(72px + var(--safe-top)) 14px 16px; /* despeje para la topbar */
-      text-shadow: 0 6px 24px rgba(0,0,0,.45);
-    }
+    /* TITLE (se mantiene tu clase .title) */
+    .title{ 
+      font-size: clamp(26px, 7vw, 92px); line-height:1.03; text-align:center; 
+      margin: calc(76px + var(--safe-top)) 12px 20px; text-shadow: 0 6px 24px rgba(0,0,0,.45);
+    } 
 
-    /* GRID LAYOUT (mobile-first) */
-    .wrap{padding:0 10px 90px}
+    /* LAYOUT */
+    .container-xxl{padding-left:8px; padding-right:8px}
     .grid{
-      display:grid; gap:12px; place-items:center;
-      grid-template-columns: 1fr; /* por defecto apilado */
+      display:grid; gap:12px; place-items:center; padding:12px 0 80px;
+      grid-template-columns: repeat(2, minmax(0,1fr)); /* 2 columnas en móviles */
     }
-    /* Dos columnas desde teléfonos "normales" hacia arriba */
-    @media (min-width:380px){ .grid{ grid-template-columns: 1fr 1fr; gap:12px } }
-    @media (min-width:560px){ .grid{ gap:16px } }
+    /* En pantallas ultra angostas, apilar para evitar aplaste */
+    @media (max-width:360px){ .grid{ grid-template-columns: 1fr } }
+    @media (min-width:768px){ .grid{ gap:18px } }
+    @media (min-width:992px){ .grid{ gap:24px } }
 
-    /* CARD */
-    .card{
-      width:100%; max-width: 460px;
-      min-height: 420px; position:relative; border-radius:14px; overflow:hidden;
-      background:rgba(255,255,255,.07); backdrop-filter: blur(2px);
-      box-shadow: 0 12px 40px rgba(0,0,0,.35);
-      touch-action: manipulation;
-    }
-    @media (min-width:480px){ .card{ min-height:460px } }
+    .card{ 
+      width:100%; max-width:520px; 
+      min-height:420px; position:relative; border-radius:14px; overflow:hidden; 
+      background:rgba(255,255,255,.07); backdrop-filter: blur(2px); box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    } 
+    @media (min-width:480px){ .card{ min-height:520px } }
 
     .photo{position:absolute; inset:0; display:grid; place-items:center}
-    .photo img{width:100%; height:100%; object-fit:cover; filter:blur(1px) saturate(.9) brightness(.95)}
+    .photo img{width:100%; height:100%; object-fit:cover; filter:blur(1px) saturate(.9) brightness(.95);} 
 
     .panel{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:16px 12px}
 
-    /* Subtítulo dentro de la tarjeta */
-    .panel .miniTitle{
-      font-size: clamp(16px, 4.4vw, 22px);
-      font-weight:700; color:#fff; text-shadow: 0 6px 18px rgba(0,0,0,.45);
-    }
-
     /* Pills y etiquetas */
     .pill{
-      font-family:Playfair Display, serif; font-weight:700;
-      font-size: clamp(16px, 3.9vw, 20px); color:#000; background:var(--pill);
+      font-family:Playfair Display, serif; font-weight:700; 
+      font-size: clamp(16px, 3.8vw, 28px); color:#000; background:var(--pill); 
       border-radius:999px; padding:6px 18px; box-shadow:0 10px 30px rgba(0,0,0,.25);
-    }
+    }  
 
     .row{display:flex; flex-direction:column; align-items:center; gap:8px; margin-top:12px}
 
     .circle{
-      display:grid; place-items:center; min-width:64px; height:40px;
-      border-radius:999px; background:#fff; color:#000;
-      font-family:Playfair Display, serif; font-size:24px; font-weight:700;
-      box-shadow:0 12px 28px rgba(0,0,0,.25); padding:0 14px;
+      display:grid; place-items:center; min-width:60px; height:40px; 
+      border-radius:999px; background:#fff; color:#000; 
+      font-family:Playfair Display, serif; font-size:22px; font-weight:700; 
+      box-shadow:0 12px 28px rgba(0,0,0,.25); padding:0 12px;
     }
-    @media (max-width:360px){ .circle{min-width:58px; height:36px; font-size:20px} }
+    @media (max-width:360px){ .circle{ min-width:56px; height:36px; font-size:20px } }
 
     .spacer{flex:1}
 
-    .inputWrap{display:flex; flex-direction:column; gap:8px; width: min(360px, 92%)}
-    .inputWrap input{
-      border:none; border-radius:999px; padding:12px 16px; text-align:center;
-      font-family:Inter, system-ui; font-size:18px; outline:0;
-      box-shadow:0 10px 26px rgba(0,0,0,.25); background:#fff; color:#000;
+    .inputWrap{display:flex; flex-direction:column; gap:10px; width:100%; max-width:300px}
+    .inputWrap label{
+      font-family:Inter, system-ui; font-weight:600; color:#000; background:#fff; 
+      border-radius:999px; padding:10px 16px; text-align:center; box-shadow:0 10px 26px rgba(0,0,0,.25)
     }
-    .inputWrap input::placeholder{color:#555}
+    .inputWrap input{
+      border:none; border-radius:999px; padding:12px 16px; text-align:center; font-size:16px; outline:0; 
+      box-shadow:0 10px 26px rgba(0,0,0,.25); width:100%; background:#fff; color:#000;
+    }
 
     .btn{
-      cursor:pointer; background:var(--accent); color:#111; width: min(360px, 92%);
-      font-family:Inter, system-ui; font-weight:800; border:none; border-radius:999px;
-      padding:12px 18px; box-shadow:0 12px 34px rgba(0,0,0,.3); font-size:16px;
+      cursor:pointer; background:var(--accent); color:#111; font-family:Inter, system-ui; font-weight:800; 
+      border:none; border-radius:999px; padding:12px 18px; box-shadow:0 12px 34px rgba(0,0,0,.3); font-size:16px;
     }
     .btn:active{transform:translateY(1px)}
 
     .footLabel{
-      position:absolute; left:0; right:0; bottom:8px;
-      font-size: clamp(22px, 6vw, 36px); text-shadow: 0 6px 18px rgba(0,0,0,.45);
-      text-align:center; pointer-events:none;
+      font-size: clamp(22px, 6vw, 72px); text-shadow: 0 6px 18px rgba(0,0,0,.45); margin-top:8px; text-align:center
     }
 
-    /* Barra baja segura para iPhone */
-    .bottom-pad{height:calc(16px + var(--safe-bottom))}
+    /* Pequeñas mejoras de accesibilidad táctil */
+    button, input{ touch-action: manipulation; }
   </style>
 </head>
 <body>
-  <div class="bg">
-    <img alt="Fondo" loading="lazy"
-         src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npDQYuEjv4EO_3O1IvDLqZmVao04EFwANq0i1WXk39zfBz-xaJ-ZGoe5iwmxXEba8CcJ26lJMOb5wIARnWLPgTCNIvcOpoMz5473epgQHZnbflIQg9_FCn1Ycgj_li9ymQkKKe6=s1360-w1360-h1020-rw">
-  </div>
+  <div class="bg"><img alt="Fondo" loading="lazy" src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npDQYuEjv4EO_3O1IvDLqZmVao04EFwANq0i1WXk39zfBz-xaJ-ZGoe5iwmxXEba8CcJ26lJMOb5wIARnWLPgTCNIvcOpoMz5473epgQHZnbflIQg9_FCn1Ycgj_li9ymQkKKe6=s1360-w1360-h1020-rw"></div>
 
   <div class="topbar">
     <div class="brand">
@@ -137,19 +117,100 @@
     <div class="code">5092</div>
   </div>
 
-  <h1 class="pageTitle">Material de camión</h1>
+  <h1 class="title">Material de camion</h1>
 
-  <main class="wrap">
+  <main class="container-xxl px-2">
     <section class="grid">
 
       <!-- SEÑORA -->
       <article class="card" id="card-senora">
         <div class="photo">
-          <img alt="Señora" loading="lazy"
-               src="https://static.pullandbear.net/2/photos/2025/I/0/1/p/7710/381/800/7710381800_4_1_8.jpg?t=1758030647723"/>
+          <img alt="Señora" loading="lazy" src="https://static.pullandbear.net/2/photos/2025/I/0/1/p/7710/381/800/7710381800_4_1_8.jpg?t=1758030647723"/>
         </div>
         <div class="panel">
-          <div class="row"><div class="miniTitle">Plegables</div></div>
+          <div class="row"><div class="title" style="color: white;">Plegables</div></div>
           <div class="row">
             <div class="pill">Buffer</div>
-            <div class="circle" id="senora-buffer">0</div
+            <div class="circle" id="senora-buffer">0</div>
+          </div>
+          <div class="row">
+            <div class="pill">Piso</div>
+            <div class="circle" id="senora-piso">0</div>
+          </div>
+          <div class="spacer"></div>
+          <div class="inputWrap"> 
+            <input id="senora-input" inputmode="numeric" placeholder="Unidades totales" />
+          </div>
+          <div style="margin-top:10px"><button class="btn" data-action="calc" data-side="senora">Calcular</button></div>
+        </div>
+        <div class="footLabel">Señora</div>
+      </article>
+
+      <!-- CABALLERO -->
+      <article class="card" id="card-caballero">
+        <div class="photo">
+          <img alt="Caballero" loading="lazy" src="https://static.pullandbear.net/assets/public/9b75/a0b1/eea445c29c7b/ff19afe46f50/07700513716-A7M/07700513716-A7M.jpg?ts=1755527695357&w=1050&f=auto"/>
+        </div>
+        <div class="panel">
+          <div class="row"><div class="title" style="color: white;">Plegables</div></div>
+          <div class="row">
+            <div class="pill">Buffer</div>
+            <div class="circle" id="caballero-buffer">0</div>
+          </div>
+          <div class="row">
+            <div class="pill">Piso</div>
+            <div class="circle" id="caballero-piso">0</div>
+          </div>
+          <div class="spacer"></div>
+          <div class="inputWrap">
+            <input id="caballero-input" inputmode="numeric" placeholder="Unidades Totales"/>
+          </div>
+          <div style="margin-top:10px"><button class="btn" data-action="calc" data-side="caballero">Calcular</button></div>
+        </div>
+        <div class="footLabel">Caballero</div>
+      </article>
+
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function redondear(valor){ return Math.round(Number(valor)); }
+
+    function calcularSenora(unidades){
+      const u = Number(unidades)||0;
+      const buffer = (u*0.6)/25/5;   // (unidades *.6)/(25)/(5)
+      const piso   = (u*0.4)/25/4;   // (unidades *.4)/(25)/(4)
+      return {buffer:redondear(buffer), piso:redondear(piso)};
+    }
+    function calcularCaballero(unidades){
+      const u = Number(unidades)||0;
+      const buffer = (u*0.6)/20/5;   // (unidades *.6)/(20)/(5)
+      const piso   = (u*0.4)/20/4;   // (unidades *.4)/(20)/(4)
+      return {buffer:redondear(buffer), piso:redondear(piso)};
+    }
+
+    function actualizar(side, vals){
+      document.getElementById(`${side}-buffer`).textContent = isFinite(vals.buffer)? vals.buffer : 0;
+      document.getElementById(`${side}-piso`).textContent   = isFinite(vals.piso)? vals.piso : 0;
+    }
+
+    document.querySelectorAll('[data-action="calc"]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const side = btn.dataset.side; // "senora" | "caballero"
+        const input = document.getElementById(`${side}-input`);
+        const unidades = Number((input.value||'').toString().replace(/[^0-9.\-]/g,''));
+        if(!unidades || unidades < 0){
+          actualizar(side, {buffer:0, piso:0});
+          return;
+        }
+        if(side==='senora'){
+          actualizar('senora', calcularSenora(unidades));
+        }else{
+          actualizar('caballero', calcularCaballero(unidades));
+        }
+      });
+    });
+  </script>
+</body>
+</html>
