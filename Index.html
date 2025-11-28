@@ -323,6 +323,26 @@
     }
   });
 </script>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const menu = document.getElementById("menu");
+  const toggleBtn = document.getElementById("toggle-menu-btn");
+
+  // Abrir/cerrar menú
+  toggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); 
+    menu.classList.toggle("open");
+  });
+
+  // Cerrar menú al hacer clic fuera
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target) && !toggleBtn.contains(e.target)) {
+      menu.classList.remove("open");
+    }
+  });
+});
+</script>
+
 
 
 </body>
