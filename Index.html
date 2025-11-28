@@ -2,12 +2,14 @@
 <html lang="es-MX">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- DESACTIVAR ZOOM EN MÓVILES -->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
   <title>Material de camión – Pull&Bear</title>
 
-  <!-- ===================================== -->
-  <!--      📱 MODO APP PARA iPHONE          -->
-  <!-- ===================================== -->
+  <!-- MODO APP iPHONE -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -22,8 +24,6 @@
 
   <!-- BOOTSTRAP -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<meta name="viewport" 
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <style>
     :root{
@@ -49,27 +49,29 @@
     }
 
     /* HEADER */
-    .topbar{
-      position:fixed; left:20px; top:20px; right:20px;
-      display:flex; align-items:center; justify-content:space-between; z-index:6;
-    }
-
+    .topbar{background-color: #000;position:fixed; left:0px; top:0px; right:0px; display:flex; align-items:center; justify-content:space-between; z-index:1002}
+    .brand{display:flex; gap:14px; align-items:center}
     .brand img{height:44px; filter:drop-shadow(0 2px 6px var(--shadow));}
-    .code{font-family:Inter; font-weight:700; opacity:.9;}
+    .code{font-family:Inter, system-ui, Arial; font-weight:700; letter-spacing:1px; opacity:.9}
 
     /* MENU LATERAL */
     #menu-btn{
-      width:40px; height:36px; cursor:pointer;
-      display:flex; flex-direction:column; justify-content:space-between;
+      width:20px; height:20px; cursor:pointer;
+      display:flex; flex-direction:column; justify-content:space-between; z-index:1003;
     }
-    #menu-btn span{
-      height:6px; background:white; border-radius:4px;
+    #menu-btn span{height:6px; background:white; border-radius:4px;}
+
+    /* overlay para detectar clic fuera */
+    #menu-overlay{
+      position:fixed; inset:0; background:rgba(0,0,0,0.4);
+      opacity:0; visibility:hidden; transition:.25s; z-index:1000;
     }
+    #menu-overlay.show{ opacity:1; visibility:visible; }
 
     #sidebar{
-      position:fixed; top:0; left:-260px; width:260px; height:100vh;
+      position:fixed; top:0; left:-280px; width:280px; height:100vh;
       background:#000000d9; backdrop-filter:blur(6px);
-      padding:60px 20px; transition:.4s ease; z-index:999;
+      padding:80px 20px; transition:.35s ease; z-index:1001;
     }
     #sidebar.open{ left:0; }
 
@@ -80,270 +82,319 @@
     }
 
     /* TITLE */
-    .title{
-      font-size: clamp(34px, 6vw, 92px);
-      line-height:1.03; text-align:center; margin:100px 16px 28px;
-      text-shadow: 0 6px 24px rgba(0,0,0,.45);
-    }
+    .title{ font-size: clamp(34px, 6vw, 92px); line-height:1.03; text-align:center; margin:100px 16px 28px; text-shadow: 0 6px 24px rgba(0,0,0,.45);} 
 
-    /* GRID - CARDS */
-    .grid{
-      display:grid; grid-template-columns: 1fr 1fr; gap:18px;
-      place-items:center; padding:12px 0 80px;
-    }
-    @media (max-width:480px){ .grid{grid-template-columns:1fr} }
+    /* LAYOUT */
+    .grid{display:flex; grid-template-columns: 1fr 1fr; gap:18px; place-items:center; padding:12px 0 80px}
+    @media (max-width:480px){ .grid{gap:12px; grid-template-columns:1fr } }
+    @media (min-width:992px){ .grid{gap:42px} }
+    @media (min-width:768px){ .grid{gap:36px}}
+    @media (min-width:992px){ .grid{grid-template-columns: 1fr 1fr; gap:42px} }
+    @media (min-width:980px){ .grid{grid-template-columns: 1fr 1fr; gap:42px} }
 
-    .card{
-      width:clamp(240px, 46vw, 520px); min-height:560px;
-      position:relative; border-radius:14px; overflow:hidden;
-      background:rgba(255,255,255,.07); backdrop-filter: blur(2px);
-      box-shadow: 0 12px 40px rgba(0,0,0,.35);
-    }
+    .card{ width:clamp(140px, 46vw, 220px); min-height:390px; position:relative; border-radius:14px; overflow:hidden; background:rgba(255,255,255,.07); backdrop-filter: blur(2px); box-shadow: 0 12px 40px rgba(0,0,0,.35);} 
+    @media (min-width:768px){ .card{min-height:620px}}
+    .photo{position:absolute; inset:0; display:grid; place-items:center}
+    .photo img{width:100%; height:100%; object-fit:cover; filter: brightness(0.5) contrast(1.4);
+} 
 
-    .photo img{width:100%; height:100%; object-fit:cover; filter:blur(1px) saturate(.9) brightness(.95);}
-    .panel{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; padding:20px;}
+    .panel{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:20px}
 
-    .pill{
-      background:white; padding:6px 22px; border-radius:999px;
-      color:black; font-family:Playfair Display; font-weight:700; font-size:22px;
-    }
+    .pill{font-family:Playfair Display, serif; font-weight:700; font-size: clamp(18px, 2.2vw, 28px); color:#000; background:var(--pill); border-radius:999px; padding:6px 22px; box-shadow:0 10px 30px rgba(0,0,0,.25);}  
 
     .row{display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:16px}
-    .circle{
-      display:grid; place-items:center;
-      width:72px; height:44px; border-radius:999px; background:#fff;
-      color:#000; font-size:28px; font-weight:700;
-    }
+    .circle{display:grid; place-items:center; width:72px; height:44px; border-radius:999px; background:#fff; color:#000; font-family:Playfair Display, serif; font-size:28px; font-weight:700; box-shadow:0 12px 28px rgba(0,0,0,.25)}
+    @media (max-width:380px){ .circle{width:64px; height:40px; font-size:24px} }
 
-    .inputWrap input{
-      border:none; border-radius:999px; padding:12px 18px; text-align:center;
-      font-size:18px;
-    }
+    .spacer{flex:1}
 
-    .footLabel{
-      font-size: clamp(34px, 5vw, 72px);
-      text-shadow: 0 6px 18px rgba(0,0,0,.45); margin-top:8px; text-align:center
-    }
+    .inputWrap{display:flex; flex-direction:column; gap:10px; width:min(360px, 80%)}
+    .inputWrap label{font-family:Inter, system-ui; font-weight:600; color:#000; background:#fff; border-radius:999px; padding:10px 18px; text-align:center; box-shadow:0 10px 26px rgba(0,0,0,.25)}
+    .inputWrap input{border:none; border-radius:999px; padding:12px 18px; text-align:center; font-size:18px; outline:0; box-shadow:0 10px 26px rgba(0,0,0,.25)}
+
+    .btn{cursor:pointer; background:var(--accent); color:#111; font-family:Inter, system-ui; font-weight:800; border:none; border-radius:999px; padding:10px 22px; box-shadow:0 12px 34px rgba(0,0,0,.3)}
+    .btn:active{transform:translateY(1px)}
+
+    .footLabel{font-size: clamp(34px, 5vw, 72px); text-shadow: 0 6px 18px rgba(0,0,0,.45); margin-top:8px; text-align:center}
 
     /* CONTADOR MANUAL */
     #manual-section{ margin-top:120px; padding-bottom:120px; }
-    #manual-display{
-      font-size: clamp(80px, 12vw, 150px);
-      text-align:center; font-weight:900; margin-bottom:30px;
-      text-shadow:0 8px 22px rgba(0,0,0,.55);
-    }
+    #manual-display{ font-size: clamp(80px, 12vw, 150px); text-align:center; font-weight:900; margin-bottom:30px; text-shadow:0 8px 22px rgba(0,0,0,.55); }
+    .btn-counter{ width:140px; font-size:20px; font-weight:700; padding:10px 0; border:none; border-radius:999px; box-shadow:0 10px 26px rgba(0,0,0,.35); }
+/* POSICIÓN CORRECTA DEL BOTÓN DE MENÚ */
+#menu-btn{
+  font-size: clamp(22px, 3vw, 25px);
+  position: fixed;
+  top: 0px;
+  right: 40px;
+  z-index: 2000;
+}
 
-    .btn-counter{
-      width:140px; font-size:20px; font-weight:700;
-      padding:10px 0; border:none; border-radius:999px;
-      box-shadow:0 10px 26px rgba(0,0,0,.35);
-    }
+.card-title{
+  font-size: 35px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin: 10px 0 0 0;  /* título pegado arriba sin espacio muerto */
+  font-family: "Playfair Display", serif;
+}
+.card-title2{
+  font-size: 25px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin: 10px 0 0 0;  /* título pegado arriba sin espacio muerto */
+  font-family: "Playfair Display", serif;
+}
+.card-title3{
+  font-size: 35px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+
+  font-family: "Playfair Display", serif;
+}
+.input-linea {
+  text-align: center;
+  width: 100%;
+  padding: 8px 4px;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid white !important;
+  color: white;
+  font-size: 25px;
+  outline: none !important;
+}
+
+.input-linea::placeholder {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+}
+
+
   </style>
 </head>
-
 <body>
 
+  <!-- OVERLAY (para cerrar al tocar fuera) -->
+  <div id="menu-overlay" aria-hidden="true"></div>
+
   <!-- SIDEBAR MENU -->
-  <div id="sidebar">
-    <a href="#top">Contar material</a>
-    <a href="#manual-section">Cuenta personas</a>
+  <div id="sidebar" aria-hidden="true">
+    <a href="#materialc" data-scroll-to="material">Contar material</a>
+    <a href="#manual-section" data-scroll-to="manual">Cuenta personas</a>
   </div>
 
-  <!-- FONDO -->
+  <!-- BACKGROUND IMAGE (manteniendo la tuya) -->
   <div class="bg"><img alt="Fondo" src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npDQYuEjv4EO_3O1IvDLqZmVao04EFwANq0i1WXk39zfBz-xaJ-ZGoe5iwmxXEba8CcJ26lJMOb5wIARnWLPgTCNIvcOpoMz5473epgQHZnbflIQg9_FCn1Ycgj_li9ymQkKKe6=s1360-w1360-h1020-rw"></div>
 
   <!-- TOPBAR -->
   <div class="topbar" id="top">
-    <div id="menu-btn">
-      <span></span><span></span><span></span>
-    </div>
-
+    
     <div class="brand">
-      <img alt="Pull&Bear" src="https://blackdevice.com/wp-content/uploads/2025/03/logo-pull-bear.png"/>
+      <img alt="Pull&Bear" src="https://blackdevice.com/wp-content/uploads/2025/03/logo-pull-bear.png"/><br>  
+      
+      <div id="menu-btn" role="button" aria-label="Abrir menú">
+        5092
+        <br>
+     </div>
     </div>
-
-    <div class="code">5092</div>
   </div>
 
-  <h1 class="title">Material de camión</h1>
+  <h1 id="materialc"class="title">Material de camion</h1>
 
   <main class="container-xxl px-3 px-md-4">
+  <section class="grid">
 
-    <!-- GRID -->
-    <section class="grid">
-
-      <!-- SEÑORA -->
-      <article class="card">
-        <div class="photo">
-          <img src="https://static.pullandbear.net/2/photos/2025/I/0/1/p/7710/381/800/7710381800_4_1_8.jpg?t=1758030647723">
-        </div>
-
-        <div class="panel">
-          <div class="row"><div class="title" style="color:white;">Plegables</div></div>
-
-          <div class="row">
-            <div class="pill">Buffer</div>
-            <div class="circle" id="senora-buffer">0</div>
-          </div>
-
-          <div class="row">
-            <div class="pill">Piso</div>
-            <div class="circle" id="senora-piso">0</div>
-          </div>
-
-          <div class="spacer"></div>
-
-          <div class="inputWrap">
-            <input id="senora-input" inputmode="numeric" placeholder="Unidades totales">
-          </div>
-        </div>
-
-        <div class="footLabel">Señora</div>
-      </article>
-
-      <!-- CABALLERO -->
-      <article class="card">
-        <div class="photo">
-          <img src="https://static.pullandbear.net/assets/public/9b75/a0b1/eea445c29c7b/ff19afe46f50/07700513716-A7M/07700513716-A7M.jpg?ts=1755527695357&w=1050&f=auto">
-        </div>
-
-        <div class="panel">
-          <div class="row"><div class="title" style="color:white;">Plegables</div></div>
-
-          <div class="row">
-            <div class="pill">Buffer</div>
-            <div class="circle" id="caballero-buffer">0</div>
-          </div>
-
-          <div class="row">
-            <div class="pill">Piso</div>
-            <div class="circle" id="caballero-piso">0</div>
-          </div>
-
-          <div class="spacer"></div>
-
-          <div class="inputWrap">
-            <input id="caballero-input" inputmode="numeric" placeholder="Unidades totales">
-          </div>
-        </div>
-
-        <div class="footLabel">Caballero</div>
-      </article>
-
-    </section>
-
-
-    <!-- CONTADOR MANUAL -->
-    <section id="manual-section" class="text-center mt-5">
-      <h1 class="title" style="margin-top:40px;">Cuenta personas manual</h1>
-
-      <div id="manual-display">0</div>
-
-      <div class="d-flex justify-content-center gap-3">
-        <button id="btn-sum" class="btn-counter" style="background:#2ecc71">Contar</button>
-        <button id="btn-res" class="btn-counter" style="background:#e74c3c">Restar</button>
+    <!-- SEÑORA -->
+    <article class="card" id="card-senora">
+      <div class="photo">
+        <img alt="Señora" src="https://static.pullandbear.net/assets/public/923e/6268/9cef48938b12/c6cd60b47a10/03245317250-A1M/03245317250-A1M.jpg?ts=1739446871774&w=541&f=auto"/>
       </div>
-    </section>
+      <div class="panel">
+        <div class="row"><div class="card-title">Plegables</div></div>
 
-  </main>
 
+        <div class="ro">
+          <div class="card-title2">Buffer</div>
+          <div class="card-title3" id="senora-buffer">0</div>
+        </div>
+        <div class="ro">
+          <div class="card-title2 ">Piso</div>
+          <div class="card-title3" id="senora-piso">0</div>
+        </div>
+        <div class="row"></div>
+        <div class="inputrap"> 
+          <input class="input-linea" id="senora-input" inputmode="numeric" placeholder="UNIDADES"/>
+        </div>
+      </div>
+    </article>
+
+    <!-- CABALLERO -->
+    <article class="card" id="card-caballero">
+      <div class="photo">
+        <img alt="Caballero" src="https://static.pullandbear.net/assets/public/0fa4/d009/e2014070b6c7/8d0975323189/03245520826-A1M/03245520826-A1M.jpg?ts=1735567421822&w=1082&f=auto"/>
+      </div>
+      <div class="panel">
+        <div class="row"><div class="card-title">Plegables</div></div>
+
+        <div class="ro">
+          <div class="card-title2">Buffer</div>
+          <div class="card-title3" id="caballero-buffer">0</div>
+        </div>
+        <div class="ro">
+          <div class="card-title2">Piso</div>
+          <div class="card-title3" id="caballero-piso">0</div>
+        </div>
+        <div class="row"></div>
+        <div class="inputWrp">
+          <input class="input-linea" id="caballero-input" inputmode="numeric" placeholder="UNIDADES"/>
+        </div>
+      </div>
+    </article>
+
+  </section>
+</main>
+
+  <!-- CONTADOR MANUAL -->
+  <section id="manual-section" class="text-center mt-5">
+    <h1 class="title" style="margin-top:40px;">Cuenta personas manual</h1>
+    <div id="manual-display">0</div>
+    <div class="d-flex justify-content-center gap-3">
+      <button id="btn-sum" class="btn-counter" style="background:#2ecc71">Contar</button>
+      <button id="btn-res" class="btn-counter" style="background:#e74c3c">Restar</button>
+    </div>
+  </section>
+
+  <!-- Bootstrap (si lo necesitas para otros componentes) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- SCRIPTS UNIFICADOS -->
   <script>
-    /* MENU LATERAL */
+  document.addEventListener("DOMContentLoaded", () => {
+    // ELEMENTOS MENU
     const menuBtn = document.getElementById("menu-btn");
     const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("menu-overlay");
 
-    menuBtn.addEventListener("click", ()=> sidebar.classList.toggle("open"));
-
-    /* CALCULOS */
-    function redondear(v){ return Math.round(Number(v)); }
-
-    function calcularSenora(u){
-      return {
-        buffer: redondear((u*0.6)/25/5),
-        piso:   redondear((u*0.4)/25/4)
-      };
+    // ---- abrir / cerrar menú ----
+    function openMenu() {
+      sidebar.classList.add("open");
+      overlay.classList.add("show");
+      // accesibilidad
+      sidebar.setAttribute("aria-hidden", "false");
+      overlay.setAttribute("aria-hidden", "false");
+    }
+    function closeMenu() {
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+      sidebar.setAttribute("aria-hidden", "true");
+      overlay.setAttribute("aria-hidden", "true");
     }
 
-    function calcularCaballero(u){
-      return {
-        buffer: redondear((u*0.6)/20/5),
-        piso:   redondear((u*0.4)/20/4)
-      };
-    }
-
-    function actualizar(tipo, vals){
-      document.getElementById(`${tipo}-buffer`).textContent = vals.buffer;
-      document.getElementById(`${tipo}-piso`).textContent   = vals.piso;
-    }
-
-    document.getElementById("senora-input").addEventListener("input", e=>{
-      actualizar("senora", calcularSenora(Number(e.target.value)||0));
+    // toggle con stopPropagation para evitar que el listener global cierre inmediatamente
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (sidebar.classList.contains("open")) closeMenu(); else openMenu();
     });
 
-    document.getElementById("caballero-input").addEventListener("input", e=>{
-      actualizar("caballero", calcularCaballero(Number(e.target.value)||0));
+    // cerrar al hacer clic en overlay (afuera)
+    overlay.addEventListener("click", () => closeMenu());
+
+    // cerrar al presionar ESC
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
     });
 
-    /* CONTADOR MANUAL */
+    // cerrar al clicar una opción del menú y hacer scroll suave
+    sidebar.querySelectorAll("a[data-scroll-to]").forEach(link => {
+      link.addEventListener("click", (ev) => {
+        ev.preventDefault(); // evitar comportamiento por defecto
+        const target = link.getAttribute("href");
+        closeMenu();
+        // pequeño delay para que el menú cierre antes de scrollear
+        setTimeout(() => {
+          const el = document.querySelector(target);
+          if(el) {
+            const top = Math.max(0, el.getBoundingClientRect().top + window.pageYOffset - 20);
+            window.scrollTo({ top, behavior: "smooth" });
+          } else {
+            window.scrollTo({ top:0, behavior:"smooth" });
+          }
+        }, 180);
+      });
+    });
+
+    // PREVENIR que clics dentro del sidebar se consideren "afuera"
+    sidebar.addEventListener("click", (e) => e.stopPropagation());
+
+    // ---- FORZAR SCROLL ARRIBA cuando se abre como "app" en iOS (evita que recuerde ultimo scroll) ----
+    window.addEventListener("load", () => {
+      if (window.navigator.standalone === true) {
+        setTimeout(()=> window.scrollTo(0,0), 120);
+      }
+    });
+
+    // ---------- LÓGICA DE CÁLCULO (AUTOMÁTICO) ----------
+    function redondear(valor){ return Math.round(Number(valor)); }
+
+    function calcularSenora(unidades){
+      const u = Number(unidades) || 0;
+      const buffer = (u*0.6)/25/5;
+      const piso   = (u*0.4)/25/4;
+      return {buffer:redondear(buffer), piso:redondear(piso)};
+    }
+    function calcularCaballero(unidades){
+      const u = Number(unidades) || 0;
+      const buffer = (u*0.6)/20/5;
+      const piso   = (u*0.4)/20/4;
+      return {buffer:redondear(buffer), piso:redondear(piso)};
+    }
+
+    function actualizar(side, vals){
+      const buf = document.getElementById(`${side}-buffer`);
+      const pis = document.getElementById(`${side}-piso`);
+      if(buf) buf.textContent = isFinite(vals.buffer)? vals.buffer : 0;
+      if(pis) pis.textContent = isFinite(vals.piso)? vals.piso : 0;
+    }
+
+    const senoraInput = document.getElementById("senora-input");
+    const caballeroInput = document.getElementById("caballero-input");
+
+    // inputmode numeric acepta teclados numéricos; limpiamos cualquier carácter no numérico (excepto punto)
+    function sanitizeNumberInput(value){
+      return value.toString().replace(/[^0-9.]/g,'');
+    }
+
+    senoraInput && senoraInput.addEventListener("input", (e) => {
+      const v = sanitizeNumberInput(e.target.value);
+      e.target.value = v;
+      actualizar('senora', calcularSenora(Number(v) || 0));
+    });
+
+    caballeroInput && caballeroInput.addEventListener("input", (e) => {
+      const v = sanitizeNumberInput(e.target.value);
+      e.target.value = v;
+      actualizar('caballero', calcularCaballero(Number(v) || 0));
+    });
+
+    // ---------- CONTADOR MANUAL ----------
     let contador = 0;
     const display = document.getElementById("manual-display");
+    const btnSum = document.getElementById("btn-sum");
+    const btnRes = document.getElementById("btn-res");
 
-    document.getElementById("btn-sum").addEventListener("click", ()=>{
-      contador++; display.textContent = contador;
+    btnSum && btnSum.addEventListener("click", () => {
+      contador++;
+      display.textContent = contador;
     });
-
-    document.getElementById("btn-res").addEventListener("click", ()=>{
+    btnRes && btnRes.addEventListener("click", () => {
       if(contador>0) contador--;
       display.textContent = contador;
     });
+
+  }); // DOMContentLoaded
   </script>
-  <script>
-  const menuBtn = document.getElementById("menu-btn");
-  const sidebar = document.getElementById("sidebar");
-
-  // Abrir / cerrar menú
-  menuBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-  });
-
-  // Cerrar tocando fuera del menú
-  document.addEventListener("click", (e) => {
-    if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
-      sidebar.classList.remove("open");
-    }
-  });
-</script>
-<script>
-  // Si la página está abierta como app iOS → Forzar scroll arriba
-  window.addEventListener("load", () => {
-    if (window.navigator.standalone === true) {
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 100);
-    }
-  });
-</script>
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const menu = document.getElementById("menu");
-  const toggleBtn = document.getElementById("toggle-menu-btn");
-
-  // Abrir/cerrar menú
-  toggleBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); 
-    menu.classList.toggle("open");
-  });
-
-  // Cerrar menú al hacer clic fuera
-  document.addEventListener("click", (e) => {
-    if (!menu.contains(e.target) && !toggleBtn.contains(e.target)) {
-      menu.classList.remove("open");
-    }
-  });
-});
-</script>
-
-
 
 </body>
 </html>
