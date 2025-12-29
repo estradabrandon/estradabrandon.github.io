@@ -81,6 +81,7 @@
       position:fixed; top:0; left:-280px; width:280px; height:100vh;
       background:#000000d9; backdrop-filter:blur(6px);
       padding:80px 20px; transition:.35s ease; z-index:1001;
+      overflow-y: auto; 
     }
     #sidebar.open{ left:0; }
 
@@ -119,7 +120,7 @@
     .input-linea::placeholder { font-size: 15px; color: rgba(255,255,255,0.6); }
 
     /* =========================================
-       DISEÑO CUENTA PERSONAS (SIN FONDO)
+       DISEÑO CUENTA PERSONAS 
        ========================================= */
     #manual-section {
       margin: 20px auto 80px auto;
@@ -128,84 +129,92 @@
       text-align: center;
     }
     
-    .counter-card {
-      background: transparent; 
-      border: none;
-      box-shadow: none;
-      padding: 20px 0;
-    }
-
+    .counter-card { background: transparent; border: none; box-shadow: none; padding: 20px 0; }
     .counter-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #fff;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.5); 
+      font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700;
+      margin-bottom: 10px; color: #fff; text-shadow: 0 4px 12px rgba(0,0,0,0.5); 
     }
 
     #manual-display {
-      font-family: 'Inter', sans-serif;
-      font-size: clamp(80px, 15vw, 120px);
-      font-weight: 700;
-      color: var(--fg);
-      line-height: 1;
-      margin: 10px 0 40px 0;
+      font-family: 'Inter', sans-serif; font-size: clamp(80px, 15vw, 120px); font-weight: 700;
+      color: var(--fg); line-height: 1; margin: 10px 0 40px 0;
       text-shadow: 0 4px 24px rgba(0,0,0,0.6); 
     }
 
-    .counter-controls {
-      display: flex;
-      justify-content: center;
-      gap: 30px; 
-    }
-
+    .counter-controls { display: flex; justify-content: center; gap: 30px; }
     .btn-counter {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.3);
-      background: transparent;
-      color: white;
-      font-size: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      backdrop-filter: blur(4px); 
+      width: 70px; height: 70px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3); background: transparent;
+      color: white; font-size: 30px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s ease; backdrop-filter: blur(4px); 
     }
-
     .btn-counter:active { transform: scale(0.95); }
-    
-    #btn-sum {
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 0 15px rgba(176, 244, 111, 0.1);
-    }
+    #btn-sum { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 15px rgba(176, 244, 111, 0.1); }
     #btn-sum:hover { background: rgba(176, 244, 111, 0.1); box-shadow: 0 0 25px rgba(176, 244, 111, 0.3); }
-
-    #btn-res {
-      border-color: var(--red-alert);
-      color: var(--red-alert);
-      opacity: 0.8;
-    }
+    #btn-res { border-color: var(--red-alert); color: var(--red-alert); opacity: 0.8; }
     #btn-res:hover { background: rgba(255, 77, 77, 0.1); opacity: 1; }
 
+    /* =========================================
+       ESTILOS ANALISIS SEMANAL CM
+       ========================================= */
+    .analysis-section {
+      margin: 30px auto 80px auto;
+      max-width: 900px;
+      padding: 0 15px;
+      font-family: 'Inter', sans-serif;
+    }
+    .analysis-header { text-align: center; margin-bottom: 25px; }
+    .analysis-header h2 { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin: 0; color: #fff; }
+    .analysis-header .fecha-actual { font-size: 16px; color: #ccc; margin-top: 5px; font-weight: 400; }
+    
+    .section-separator {
+        text-align: center; margin: 40px 0 20px 0; border-bottom: 1px solid rgba(255,255,255,0.2); line-height: 0.1em;
+    }
+    .section-separator span { background: #111; padding: 0 15px; color: var(--accent); font-family: 'Playfair Display', serif; font-size: 18px; text-transform: uppercase; letter-spacing: 2px;}
+
+    /* Contenedor de Tablas */
+    .tables-wrapper { display: flex; flex-direction: column; gap: 30px; }
+    .dual-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media(max-width: 600px) { .dual-tables { grid-template-columns: 1fr; } }
+
+    /* Estilo de Tablas */
+    .cm-table {
+        width: 100%; border-collapse: collapse; 
+        background: var(--glass-bg); backdrop-filter: blur(4px);
+        border-radius: 10px; overflow: hidden;
+        border: 1px solid var(--glass-border);
+    }
+    .cm-table th, .cm-table td { padding: 10px 8px; text-align: center; color: white; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    
+    /* CAMBIO AQUI: Centrado del encabezado TIPO */
+    .cm-table th { background: rgba(0,0,0,0.4); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+    .cm-table th:first-child { text-align: center; width: 40%; padding-left: 0; }
+    
+    /* Input cells */
+    .cm-input {
+        width: 100%; background: transparent; border: none; color: white;
+        text-align: center; font-size: 15px; outline: none; font-weight: 600;
+        border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 2px;
+    }
+    .cm-input:focus { border-bottom: 1px solid var(--accent); }
+    
+    /* Header de cada tabla (ej: Global, Señora) */
+    .table-caption {
+        font-family: 'Playfair Display', serif; font-size: 18px; color: white;
+        text-align: center; background: rgba(255,255,255,0.1); padding: 8px; font-weight: 700;
+    }
+
+    /* Colores dinámicos */
+    .status-ok { color: var(--accent) !important; }
+    .status-bad { color: var(--red-alert) !important; }
 
     /* =========================================
        ESTILOS GENERALES SECCIONES DE DINERO
        ========================================= */
     .money-section {
-        padding: 15px 15px; 
-        margin-top: 30px;
-        margin-bottom: 80px;
-        max-width: 900px;
-        margin-left: auto;
-        margin-right: auto;
-        font-family: 'Inter', sans-serif;
-        border-top: 1px solid #333; 
-        padding-top: 40px;
+        padding: 15px 15px; margin-top: 30px; margin-bottom: 80px;
+        max-width: 900px; margin-left: auto; margin-right: auto;
+        font-family: 'Inter', sans-serif; border-top: 1px solid #333; padding-top: 40px;
     }
 
     .aco-header { text-align: center; margin-bottom: 15px; }
@@ -222,88 +231,35 @@
     .aco-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-bottom: 4px; }
     .aco-input-text { background: transparent; border: none; border-bottom: 1px solid white; color: white; font-size: 16px; padding: 2px 0; width: 100%; outline: none; }
 
-    .aco-money-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        align-items: start;
-    }
+    .aco-money-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
     .col-money { display: flex; flex-direction: column; gap: 8px; }
 
-    .money-row { 
-        display: flex; align-items: flex-end; justify-content: flex-start; 
-        font-size: 22px; width: 100%;
-    }
+    .money-row { display: flex; align-items: flex-end; justify-content: flex-start; font-size: 22px; width: 100%; }
     .money-label { font-weight: 400; width: 85px; text-align: left; flex-shrink: 0; }
-
     .money-input {
         background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.5);
         color: white; font-size: 22px; flex-grow: 1; width: 100%; text-align: center; outline: none; padding-bottom: 0px;
     }
     .money-input:focus { border-bottom: 2px solid var(--accent); }
 
-    /* FOOTER MODIFICADO PARA MÁS ESPACIO */
-    .footer-container {
-        display: flex; 
-        justify-content: space-between; 
-        align-items: flex-end; 
-        margin-top: 20px; 
-        gap: 10px;
-    }
-
-    /* Reducimos el ancho del total para dar espacio a la derecha */
-    .total-section { 
-        text-align: left; 
-        flex: 0 0 auto; /* No crece infinitamente */
-        margin-right: 15px;
-    }
+    /* FOOTER DINERO */
+    .footer-container { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; gap: 10px; }
+    .total-section { text-align: left; flex: 0 0 auto; margin-right: 15px; }
     .total-display { font-size: 26px; font-weight: 400; margin-bottom: 12px; line-height: 1; white-space: nowrap; }
     .total-display span { font-weight: 700; color: var(--accent); }
 
-    /* RENGLONES PEQUEÑOS (Importe Reflejado / Diferencia) */
-    .small-calc { 
-        font-size: 13px; /* <-- REDUCIDO DE 15PX A 13PX */
-        margin-top: 8px; 
-        display: flex; 
-        justify-content: flex-start; 
-        align-items: baseline; 
-        gap: 6px; 
-        color: #ccc; 
-    }
+    .small-calc { font-size: 13px; margin-top: 8px; display: flex; justify-content: flex-start; align-items: baseline; gap: 6px; color: #ccc; }
+    .small-calc span:first-child { white-space: nowrap; }
     
-    /* ESTO EVITA EL SALTO DE LÍNEA */
-    .small-calc span:first-child {
-        white-space: nowrap; 
-    }
-
-    .right-calc-layout .small-calc { justify-content: flex-end; }
-    
-    .input-money-wrapper {
-        display: flex; align-items: center; border-bottom: 1px solid #777; width: 80px; padding-bottom: 2px;
-    }
+    .input-money-wrapper { display: flex; align-items: center; border-bottom: 1px solid #777; width: 80px; padding-bottom: 2px; }
     .money-symbol { font-size: 13px; color: white; margin-right: 0px; }
-    .small-input {
-        background: transparent; border: none; color: white; text-align: right; width: 100%; font-size: 14px;
-        outline: none; padding: 0;
-    }
-
+    .small-input { background: transparent; border: none; color: white; text-align: right; width: 100%; font-size: 14px; outline: none; padding: 0; }
     .diff-display { font-weight: 700; font-size: 15px; }
 
-    .signature-section { 
-        text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; padding-bottom: 5px; 
-    }
+    .signature-section { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; padding-bottom: 5px; }
     .signature-line { width: 140px; height: 1px; background: white; margin-bottom: 8px; }
     #firma-nombre { font-size: 12px; font-weight: 700; text-transform: uppercase; }
     #firma-codigo { font-size: 11px; color: #ccc; }
-
-    /* LADO DERECHO (RECARGA) CON MÁS ESPACIO */
-    .calc-right-section {
-        flex: 1; /* Ocupa el resto del espacio disponible */
-        display: flex; 
-        flex-direction: column; 
-        align-items: flex-end; 
-        padding-bottom: 5px;
-    }
 
   </style>
 </head>
@@ -314,6 +270,7 @@
   <div id="sidebar" aria-hidden="true">
     <a href="#materialc" data-scroll-to="material">Contar material</a>
     <a href="#manual-section" data-scroll-to="manual">Cuenta personas</a>
+    <a href="#section-analisis" data-scroll-to="analisis">Analisis Semanal CM</a>
     <a href="#section-recarga" data-scroll-to="recarga">Recarga ACO</a>
     <a href="#section-aco" data-scroll-to="aco">Fondo Físico ACO</a>
   </div>
@@ -392,13 +349,247 @@
     </div>
   </section>
 
+  <section id="section-analisis" class="analysis-section">
+    <div class="analysis-header">
+        <h2>Analisis Semanal CM</h2>
+        <div class="fecha-actual cm-date-today">DD / MM / YYYY</div>
+    </div>
+
+    <div class="tables-wrapper">
+        <div class="table-container">
+            <div class="table-caption">Global</div>
+            <table class="cm-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th class="cm-date-past">Past</th>
+                        <th class="cm-date-today">Today</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Merma</td>
+                        <td><input class="cm-input past-val" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" data-type="percent"></td>
+                    </tr>
+                    <tr>
+                        <td>Importe</td>
+                        <td><input class="cm-input past-val" data-type="money"></td>
+                        <td><input class="cm-input curr-val" data-type="money"></td>
+                    </tr>
+                    <tr>
+                        <td>Unidades</td>
+                        <td><input class="cm-input past-val" data-type="number"></td>
+                        <td><input class="cm-input curr-val" data-type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Rank. Marked</td>
+                        <td><input class="cm-input past-val" data-type="number"></td>
+                        <td><input class="cm-input curr-val" data-type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Rank. World</td>
+                        <td><input class="cm-input past-val" data-type="number"></td>
+                        <td><input class="cm-input curr-val" data-type="number"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dual-tables">
+            <div class="table-container">
+                <div class="table-caption">Señora</div>
+                <table class="cm-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th class="cm-date-past">Past</th>
+                            <th class="cm-date-today">Today</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Merma</td>
+                            <td><input class="cm-input past-val" data-type="percent"></td>
+                            <td><input class="cm-input curr-val" data-type="percent"></td>
+                        </tr>
+                        <tr>
+                            <td>Importe</td>
+                            <td><input class="cm-input past-val" data-type="money"></td>
+                            <td><input class="cm-input curr-val" data-type="money"></td>
+                        </tr>
+                        <tr>
+                            <td>Unidades</td>
+                            <td><input class="cm-input past-val" data-type="number"></td>
+                            <td><input class="cm-input curr-val" data-type="number"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <div class="table-caption">Caballero</div>
+                <table class="cm-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th class="cm-date-past">Past</th>
+                            <th class="cm-date-today">Today</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Merma</td>
+                            <td><input class="cm-input past-val" data-type="percent"></td>
+                            <td><input class="cm-input curr-val" data-type="percent"></td>
+                        </tr>
+                        <tr>
+                            <td>Importe</td>
+                            <td><input class="cm-input past-val" data-type="money"></td>
+                            <td><input class="cm-input curr-val" data-type="money"></td>
+                        </tr>
+                        <tr>
+                            <td>Unidades</td>
+                            <td><input class="cm-input past-val" data-type="number"></td>
+                            <td><input class="cm-input curr-val" data-type="number"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-caption">Evidencias RFID</div>
+            <table class="cm-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th class="cm-date-past">Past</th>
+                        <th class="cm-date-today">Today</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Probador</td>
+                        <td><input class="cm-input past-val" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" data-type="percent"></td>
+                    </tr>
+                    <tr>
+                        <td>Alarmas</td>
+                        <td><input class="cm-input past-val" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" data-type="percent"></td>
+                    </tr>
+                    <tr>
+                        <td>Pedestales</td>
+                        <td><input class="cm-input past-val" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" data-type="percent"></td>
+                    </tr>
+                    <tr>
+                        <td>PDA</td>
+                        <td><input class="cm-input past-val" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" data-type="percent"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-separator"><span>Procesos</span></div>
+
+        <div class="table-container">
+            <div class="table-caption">Entradas / Puertas</div>
+            <table class="cm-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th class="cm-date-past">Past</th>
+                        <th class="cm-date-today">Today</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Rendimiento</td>
+                        <td><input class="cm-input past-val" data-type="percent" data-inverse="true"></td>
+                        <td><input class="cm-input curr-val" data-type="percent" data-inverse="true"></td>
+                    </tr>
+                    <tr>
+                        <td>Uds Pedestales</td>
+                        <td><input class="cm-input past-val" data-type="number"></td>
+                        <td><input class="cm-input curr-val" data-type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Uds Alarmas</td>
+                        <td><input class="cm-input past-val" data-type="number"></td>
+                        <td><input class="cm-input curr-val" data-type="number"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <div class="table-caption">POS / Caja</div>
+            <table class="cm-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th class="cm-date-past">Past</th>
+                        <th class="cm-date-today">Today</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tickets</td>
+                        <td><input class="cm-input past-val" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" data-type="percent"></td>
+                    </tr>
+                    <tr>
+                        <td>Devoluciones</td>
+                        <td><input class="cm-input past-val" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" data-type="percent"></td>
+                    </tr>
+                    <tr>
+                        <td>Manual</td>
+                        <td><input class="cm-input past-val" data-type="number"></td>
+                        <td><input class="cm-input curr-val" data-type="number"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <div class="table-caption">Probadores</div>
+            <table class="cm-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th class="cm-date-past">Past</th>
+                        <th class="cm-date-today">Today</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Unidades</td>
+                        <td><input class="cm-input past-val" data-type="number"></td>
+                        <td><input class="cm-input curr-val" data-type="number"></td>
+                    </tr>
+                    <tr>
+                        <td>Porcentaje</td>
+                        <td><input class="cm-input past-val" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" data-type="percent"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+  </section>
+
   <section id="section-recarga" class="money-section">
     <div class="aco-header">
         <h2>Recarga ACO</h2>
         <h3>Galerias Guadalajara 5092</h3>
     </div>
     <div class="date-row">
-         <div class="fecha-dinamica" id="recarga-fecha">DD / MM / YYYY</div>
+          <div class="fecha-dinamica" id="recarga-fecha">DD / MM / YYYY</div>
     </div>
 
     <div class="aco-money-grid">
@@ -418,11 +609,9 @@
         </div>
     </div>
 
-    <div class="footer-container right-calc-layout">
+    <div class="footer-container">
         <div class="total-section">
             <div class="total-display">Total = <span id="recarga-total">$0</span></div>
-        </div>
-        <div class="calc-right-section">
             <div class="small-calc">
                 <span>Importe reflejado:</span>
                 <div class="input-money-wrapper"><span class="money-symbol">$</span><input type="text" inputmode="numeric" id="recarga-previo" class="small-input" placeholder="0"></div>
@@ -441,7 +630,7 @@
         <h3>Galerias Guadalajara 5092</h3>
     </div>
     <div class="date-row">
-         <div class="fecha-dinamica" id="aco-fecha">DD / MM / YYYY</div>
+          <div class="fecha-dinamica" id="aco-fecha">DD / MM / YYYY</div>
     </div>
     <div class="personal-data-row">
         <div class="data-group name-group">
@@ -564,11 +753,98 @@
         if(callback) callback();
     }
 
-    /* === FECHA GLOBAL === */
+    /* === FECHA GLOBAL Y ANALISIS === */
     const hoy = new Date();
     const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    // Fecha Hoy Formato Largo
     const fechaStr = `${hoy.getDate()} / ${meses[hoy.getMonth()]} / ${hoy.getFullYear()}`;
     document.querySelectorAll(".fecha-dinamica").forEach(el => el.textContent = fechaStr);
+    
+    // Fecha Hoy Formato Corto para Analisis (DD/MM/YYYY)
+    const d = String(hoy.getDate()).padStart(2, '0');
+    const m = String(hoy.getMonth() + 1).padStart(2, '0');
+    const y = hoy.getFullYear();
+    document.querySelectorAll(".cm-date-today").forEach(el => el.textContent = `${d}/${m}/${y}`);
+
+    // Fecha Pasada (-7 dias)
+    const pastDate = new Date(hoy);
+    pastDate.setDate(hoy.getDate() - 7);
+    const pd = String(pastDate.getDate()).padStart(2, '0');
+    const pm = String(pastDate.getMonth() + 1).padStart(2, '0');
+    const py = pastDate.getFullYear();
+    document.querySelectorAll(".cm-date-past").forEach(el => el.textContent = `${pd}/${pm}/${py}`);
+
+    /* === LÓGICA ANALISIS SEMANAL CM === */
+    // Helper para parsear valores con simbolos
+    function parseCMValue(str) {
+        if(!str) return 0;
+        // Elimina todo excepto numeros y puntos
+        return parseFloat(str.replace(/[^0-9.]/g, '')) || 0;
+    }
+
+    function formatCMInput(input, type) {
+        let val = input.value.replace(/[^0-9.]/g, ''); // Solo numeros y punto
+        if (!val) return;
+        let num = parseFloat(val);
+        
+        if (type === 'money') {
+            input.value = "$" + num.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        } else if (type === 'percent') {
+            input.value = num + "%";
+        } else if (type === 'number') {
+            input.value = num.toLocaleString('es-MX');
+        }
+    }
+
+    function compareAndColor(row) {
+        const pastInput = row.querySelector('.past-val');
+        const currInput = row.querySelector('.curr-val');
+        if(!pastInput || !currInput) return;
+
+        // Quitamos estilos previos
+        currInput.classList.remove('status-ok', 'status-bad');
+        
+        // Si alguno esta vacio no comparamos
+        if(pastInput.value === "" || currInput.value === "") return;
+
+        const past = parseCMValue(pastInput.value);
+        const curr = parseCMValue(currInput.value);
+        
+        // Checamos si es lógica inversa (Rendimiento)
+        const isInverse = currInput.dataset.inverse === "true";
+
+        if (isInverse) {
+            // Lógica Inversa: Mayor = Verde, Menor = Rojo
+            if (curr < past) {
+                currInput.classList.add('status-bad'); // Rojo
+            } else {
+                currInput.classList.add('status-ok'); // Verde (Mayor o igual)
+            }
+        } else {
+            // Lógica Normal: Mayor = Rojo, Menor = Verde
+            if (curr > past) {
+                currInput.classList.add('status-bad'); // Rojo
+            } else {
+                currInput.classList.add('status-ok'); // Verde
+            }
+        }
+    }
+
+    // Listeners para inputs de Análisis
+    document.querySelectorAll('.cm-input').forEach(inp => {
+        // Al salir del foco, formatea
+        inp.addEventListener('blur', (e) => {
+            formatCMInput(e.target, e.target.dataset.type);
+        });
+        
+        // Al escribir, ejecuta comparación en tiempo real
+        inp.addEventListener('input', (e) => {
+            // Buscamos la fila padre (tr)
+            const row = e.target.closest('tr');
+            compareAndColor(row);
+        });
+    });
+
 
     /* === RECARGA ACO === */
     const recContainer = document.getElementById("section-recarga");
