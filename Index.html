@@ -190,23 +190,47 @@
     .cm-table th { background: rgba(0,0,0,0.4); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
     .cm-table th:first-child { text-align: center; width: 40%; padding-left: 0; }
     
-    /* Input cells */
+    /* MODIFICACION INPUTS Y PORCENTAJE (SUTILEZA) */
     .cm-input {
-        width: 100%; background: transparent; border: none; color: white;
+        width: 60%; /* Reducido para que quepa el % */
+        background: transparent; border: none; color: white;
         text-align: center; font-size: 15px; outline: none; font-weight: 600;
         border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 2px;
+        display: inline-block;
     }
     .cm-input:focus { border-bottom: 1px solid var(--accent); }
     
-    /* Header de cada tabla (ej: Global, Señora) */
-    .table-caption {
-        font-family: 'Playfair Display', serif; font-size: 18px; color: white;
-        text-align: center; background: rgba(255,255,255,0.1); padding: 8px; font-weight: 700;
+    /* Nueva clase para el porcentaje */
+    .cm-diff {
+        font-size: 10px;
+        font-weight: 700;
+        margin-left: 4px;
+        display: inline-block;
+        min-width: 35px;
+        vertical-align: middle;
+        text-align: left;
+    }
+    
+    /* Aseguramos que el contenido de la celda no se rompa */
+    .cm-table td:last-child {
+        white-space: nowrap;
+        padding-right: 5px;
     }
 
     /* Colores dinámicos */
     .status-ok { color: var(--accent) !important; }
     .status-bad { color: var(--red-alert) !important; }
+    
+    /* Colores para el texto del porcentaje */
+    .trend-bad { color: var(--red-alert) !important; }
+    .trend-good { color: var(--accent) !important; }
+    .trend-equal { color: #888; opacity: 0.5; }
+
+    /* Header de cada tabla (ej: Global, Señora) */
+    .table-caption {
+        font-family: 'Playfair Display', serif; font-size: 18px; color: white;
+        text-align: center; background: rgba(255,255,255,0.1); padding: 8px; font-weight: 700;
+    }
 
     /* =========================================
        ESTILOS GENERALES SECCIONES DE DINERO
@@ -370,27 +394,27 @@
                     <tr>
                         <td>Merma</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Importe</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="money"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="money"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="money"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Unidades</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="number"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Rank. Marked</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="number"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number" data-inverse="true"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Rank. World</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="number"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number" data-inverse="true"><span class="cm-diff"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -411,17 +435,17 @@
                         <tr>
                             <td>Merma</td>
                             <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                         </tr>
                         <tr>
                             <td>Importe</td>
                             <td><input class="cm-input past-val" inputmode="decimal" data-type="money"></td>
-                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="money"></td>
+                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="money"><span class="cm-diff"></span></td>
                         </tr>
                         <tr>
                             <td>Unidades</td>
                             <td><input class="cm-input past-val" inputmode="decimal" data-type="number"></td>
-                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"></td>
+                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"><span class="cm-diff"></span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -441,17 +465,17 @@
                         <tr>
                             <td>Merma</td>
                             <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                         </tr>
                         <tr>
                             <td>Importe</td>
                             <td><input class="cm-input past-val" inputmode="decimal" data-type="money"></td>
-                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="money"></td>
+                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="money"><span class="cm-diff"></span></td>
                         </tr>
                         <tr>
                             <td>Unidades</td>
                             <td><input class="cm-input past-val" inputmode="decimal" data-type="number"></td>
-                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"></td>
+                            <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"><span class="cm-diff"></span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -472,22 +496,22 @@
                     <tr>
                         <td>Probador</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Alarmas</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Pedestales</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>PDA</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -509,17 +533,17 @@
                     <tr>
                         <td>Rendimiento</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent" data-inverse="true"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent" data-inverse="true"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent" data-inverse="true"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Uds Pedestales</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="number"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Uds Alarmas</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="number"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"><span class="cm-diff"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -539,17 +563,17 @@
                     <tr>
                         <td>Tickets</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Devoluciones</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Manual</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="number"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"><span class="cm-diff"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -569,12 +593,12 @@
                     <tr>
                         <td>Unidades</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="number"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="number"><span class="cm-diff"></span></td>
                     </tr>
                     <tr>
                         <td>Porcentaje</td>
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
-                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"></td>
+                        <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -797,34 +821,58 @@
     function compareAndColor(row) {
         const pastInput = row.querySelector('.past-val');
         const currInput = row.querySelector('.curr-val');
-        if(!pastInput || !currInput) return;
+        const diffSpan = row.querySelector('.cm-diff'); // Seleccionamos el span
+        
+        if(!pastInput || !currInput || !diffSpan) return;
 
         currInput.classList.remove('status-ok', 'status-bad');
+        diffSpan.textContent = ''; // Limpiar span
+        diffSpan.className = 'cm-diff'; // Limpiar clases de color
         
-        // Si no hay valor que comparar (está escribiendo simbolos o vacío), salimos
-        // Pero el parseador manejará strings vacíos como 0.
-        // Mejor verificamos si hay algún dígito
+        // Verificamos si hay dígitos para comparar
         if(!/[0-9]/.test(pastInput.value) || !/[0-9]/.test(currInput.value)) return;
 
         const past = parseCMValue(pastInput.value);
         const curr = parseCMValue(currInput.value);
         
+        // 1. Calcular Diferencia y Porcentaje
+        let diff = curr - past;
+        let percentage = 0;
+        
+        if (past !== 0) {
+            percentage = (diff / past) * 100;
+        } else {
+            // Si el pasado era 0 y hoy hay dato, es un aumento del 100% (o infinito, pero usamos 100 para visualizar)
+            percentage = curr > 0 ? 100 : 0;
+        }
+
+        // 2. Mostrar texto en el span (+10% o -5%)
+        const sign = diff > 0 ? '+' : '';
+        // Solo mostramos porcentaje si hay diferencia
+        if(curr !== past) {
+             diffSpan.textContent = sign + Math.round(percentage) + '%';
+        }
+
+        // 3. Lógica de Colores (Inversa vs Normal)
         const isInverse = currInput.dataset.inverse === "true";
+        let isBetter = false;
 
         if (isInverse) {
-            // Lógica Inversa: Mayor = Verde, Menor = Rojo
-            if (curr < past) {
-                currInput.classList.add('status-bad'); 
-            } else {
-                currInput.classList.add('status-ok'); 
-            }
+            // Lógica Inversa (Rankings, Rendimiento): MAS ALTO ES MEJOR (Verde)
+            isBetter = curr > past;
         } else {
-            // Lógica Normal: Mayor = Rojo, Menor = Verde
-            if (curr > past) {
-                currInput.classList.add('status-bad'); 
-            } else {
-                currInput.classList.add('status-ok'); 
-            }
+            // Lógica Normal (Merma, Gastos): MAS BAJO ES MEJOR (Verde)
+            isBetter = curr < past;
+        }
+
+        if (curr === past) {
+            diffSpan.classList.add('trend-equal');
+        } else if (isBetter) {
+            currInput.classList.add('status-ok');
+            diffSpan.classList.add('trend-good'); // Verde
+        } else {
+            currInput.classList.add('status-bad');
+            diffSpan.classList.add('trend-bad'); // Rojo
         }
     }
 
@@ -845,10 +893,9 @@
         // 3. Al escribir, bloqueamos letras y ejecutamos lógica de color
         inp.addEventListener('input', (e) => {
             // a) Bloquear letras (Sanitización)
-            // Reemplaza todo lo que NO sea número o punto
             e.target.value = e.target.value.replace(/[^0-9.]/g, '');
 
-            // b) Lógica de colores
+            // b) Lógica de colores y porcentaje
             const row = e.target.closest('tr');
             compareAndColor(row);
         });
