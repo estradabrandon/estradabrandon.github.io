@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>Pull&Bear Galerias 5092</title>
+  <title>PROCESOS ANDARES 5344</title>
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -18,8 +18,37 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> 
   
   <style>
+    /* =========================================
+       PANTALLA DE CARGA (SPLASH SCREEN)
+       ========================================= */
+       #splash-screen {
+      position: fixed; inset: 0; background-color: #000000;
+      z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #splash-screen.fade-out {
+      opacity: 0; visibility: hidden;
+    }
+    .splash-title {
+      font-family: 'Inter', sans-serif; font-size: 36px; color: #ffffff;
+      font-weight: 700; letter-spacing: 6px; margin-bottom: 10px;
+      animation: latido 1.5s infinite ease-in-out;
+    }
+    .splash-subtitle {
+      font-family: 'Inter', sans-serif; font-size: 14px; color: #888888;
+      font-weight: 400; letter-spacing: 8px; text-transform: uppercase;
+      animation: latido 1.5s infinite ease-in-out;
+    }
+
+    /* Animación de palpitación sincronizada */
+    @keyframes latido {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.98); }
+    }
     /* Oculta scroll en toda la app */
     html, body {
       scrollbar-width: none; 
@@ -54,48 +83,61 @@
       background:radial-gradient(ellipse at center, rgba(0,0,0,.1) 0%, rgba(0,0,0,.6) 70%);
     }
 
-    /* HEADER */
-    .topbar{background-color: #000;position:fixed; left:0px; top:0px; right:0px; display:flex; align-items:center; justify-content:space-between; z-index:1002}
-    .brand{display:flex; gap:14px; align-items:center}
-    .brand img{height:44px; filter:drop-shadow(0 2px 6px var(--shadow));}
-    
-    /* MENU LATERAL */
-    #menu-btn{
-      width:20px; height:20px; cursor:pointer;
-      display:flex; flex-direction:column; justify-content:space-between; z-index:1003;
-      font-size: clamp(22px, 3vw, 25px);
-      position: fixed;
-      top: 0px;
-      right: 40px;
-      z-index: 2000;
-      color: white;
+ /* HEADER */
+ .topbar { background-color: rgba(0,0,0,0.85); backdrop-filter: blur(10px); position:fixed; left:0; top:0; right:0; height: 68px; display:flex; align-items:center; justify-content:space-between; z-index:1002; padding: 0 25px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .brand { display:flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+    .brand-title { font-family: 'Inter', sans-serif; font-size: 20px; color: #ffffff; font-weight: 700; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase; }
+    .brand-text { font-family: 'Inter', sans-serif; font-size: 13px; color: #888; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+    /* MENU LATERAL - ICONO HAMBURGUESA */
+    #menu-btn {
+      width: 26px; height: 16px; cursor: pointer;
+      display: flex; flex-direction: column; justify-content: space-between; z-index: 2000;
+    }
+    #menu-btn span {
+      display: block; width: 100%; height: 1.5px; background-color: white;
+      transition: all 0.3s ease; border-radius: 2px;
     }
 
-    #menu-overlay{
-      position:fixed; inset:0; background:rgba(0,0,0,0.4);
-      opacity:0; visibility:hidden; transition:.25s; z-index:1000;
+    #menu-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter: blur(3px);
+      opacity:0; visibility:hidden; transition:.4s ease; z-index:1000;
     }
-    #menu-overlay.show{ opacity:1; visibility:visible; }
+    #menu-overlay.show { opacity:1; visibility:visible; }
 
-    #sidebar{
-      position:fixed; top:0; left:-280px; width:280px; height:100vh;
-      background:#000000d9; backdrop-filter:blur(6px);
-      padding:80px 20px; transition:.35s ease; z-index:1001;
-      overflow-y: auto; 
+    /* MENU LATERAL - PANEL Y ENLACES */
+    #sidebar {
+      position:fixed; top:0; left:-320px; width:300px; height:100vh;
+      background: rgba(12, 12, 12, 0.95); backdrop-filter:blur(20px);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      padding: 80px 35px; transition: 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); z-index:1001;
+      overflow-y: auto; box-shadow: 15px 0 40px rgba(0,0,0,0.6);
     }
-    #sidebar.open{ left:0; }
+    #sidebar.open { left:0; }
 
-    #sidebar a{
-      display:block; color:white; font-family:Inter; font-size:18px;
-      padding:12px 6px; margin-bottom:8px; border-bottom:1px solid #555;
-      text-decoration:none;
+    .sidebar-header {
+      font-family: 'Playfair Display', serif; font-size: 13px; color: #777;
+      text-transform: uppercase; letter-spacing: 5px; margin-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;
     }
+
+    #sidebar a {
+      display: block; color: rgba(255,255,255,0.6); font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 400; text-transform: uppercase; letter-spacing: 3px;
+      padding: 16px 0; margin-bottom: 5px; text-decoration: none; 
+      transition: all 0.3s ease; position: relative;
+    }
+    #sidebar a:hover { color: #ffffff; padding-left: 10px; }
+    #sidebar a::after {
+      content: ''; position: absolute; left: 0; bottom: 8px; width: 0%; height: 1px;
+      background: var(--accent); transition: 0.4s ease;
+    }
+    #sidebar a:hover::after { width: 25px; }
 
     /* TITLE */
     .title{ font-size: clamp(34px, 6vw, 92px); line-height:1.03; text-align:center; margin:100px 16px 28px; text-shadow: 0 6px 24px rgba(0,0,0,.45);} 
 
-    /* LAYOUT MATERIAL */
-    .grid{display:flex; grid-template-columns: 1fr 1fr; gap:18px; place-items:center; padding:12px 0 80px}
+    /* LAYOUT MATERIAL (Ajustado padding superior a 0px) */
+    .grid{display:flex; grid-template-columns: 1fr 1fr; gap:18px; justify-content:center; padding:0px 0 80px}
     @media (max-width:480px){ .grid{gap:12px; grid-template-columns:1fr } }
     @media (min-width:992px){ .grid{grid-template-columns: 1fr 1fr; gap:42px} }
 
@@ -120,9 +162,71 @@
     .input-linea::placeholder { font-size: 15px; color: rgba(255,255,255,0.6); }
 
     /* =========================================
+       DISEÑO DE TABS ELEGANTES Y FLIP 3D
+       ========================================= */
+    .tabs-wrapper { display: flex; justify-content: center; gap: 20px; margin-bottom: 10px; } /* Margin bottom ajustado */
+    
+    .tab-btn { 
+      background: transparent; border: none; box-shadow: none;
+      color: white; padding: 10px 15px; border-radius: 0; 
+      font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease;
+      border-bottom: 2px solid white;
+    }
+    .tab-btn:hover { color: rgba(255,255,255,0.7); }
+    .tab-btn.active { 
+      color: var(--accent); 
+      border-bottom: 2px solid var(--accent); 
+      text-shadow: 0 0 10px rgba(176, 244, 111, 0.4);
+    }
+
+    /* Contenedor 3D inspirado en Uiverse */
+    .flip-card {
+      background-color: transparent;
+      width: clamp(140px, 46vw, 220px);
+      height: 390px; /* Alto fijo necesario para elementos absolutos */
+      perspective: 1000px;
+    }
+    @media (min-width:768px){ .flip-card{ height:620px } }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s; /* Velocidad de animación de Uiverse */
+      transform-style: preserve-3d;
+    }
+
+    /* Cada cara (Total, España, México) es un .card modificado */
+    .flip-card-face {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      display: none; /* Controlado por JS para evitar sobrecarga */
+    }
+
+/* =========================================
+       BOTÓN GUARDAR PDF
+       ========================================= */
+       .save-btn-container { text-align: center; margin-bottom: 40px; margin-top: -50px; position: relative; z-index: 10; }
+    .btn-guardar {
+        background: transparent; border: 1px solid rgba(255, 255, 255, 0.5);
+        color: #ffffff; padding: 12px 35px; border-radius: 2px;
+        font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400;
+        cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 3px;
+    }
+    .btn-guardar:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
+    .btn-guardar:active { transform: scale(0.98); }
+
+    /* =========================================
        DISEÑO CUENTA PERSONAS 
        ========================================= */
-    #manual-section {
+    /* =========================================
+       DISEÑO CUENTA PERSONAS 
+       ========================================= */
+       #manual-section {
       margin: 20px auto 80px auto;
       max-width: 500px;
       padding: 0 15px;
@@ -137,22 +241,23 @@
 
     #manual-display {
       font-family: 'Inter', sans-serif; font-size: clamp(80px, 15vw, 120px); font-weight: 700;
-      color: var(--fg); line-height: 1; margin: 10px 0 40px 0;
+      color: #ffffff; line-height: 1; margin: 10px 0 40px 0;
       text-shadow: 0 4px 24px rgba(0,0,0,0.6); 
     }
 
-    .counter-controls { display: flex; justify-content: center; gap: 30px; }
+    .counter-controls { display: flex; justify-content: center; gap: 40px; }
+    
     .btn-counter {
-      width: 70px; height: 70px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.3); background: transparent;
-      color: white; font-size: 30px; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all 0.2s ease; backdrop-filter: blur(4px); 
+      width: 75px; height: 75px; border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.5); background: transparent;
+      color: #ffffff; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(4px); 
     }
+    
+    .btn-counter svg { width: 30px; height: 30px; stroke-width: 2px; }
+    
+    .btn-counter:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
     .btn-counter:active { transform: scale(0.95); }
-    #btn-sum { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 15px rgba(176, 244, 111, 0.1); }
-    #btn-sum:hover { background: rgba(176, 244, 111, 0.1); box-shadow: 0 0 25px rgba(176, 244, 111, 0.3); }
-    #btn-res { border-color: var(--red-alert); color: var(--red-alert); opacity: 0.8; }
-    #btn-res:hover { background: rgba(255, 77, 77, 0.1); opacity: 1; }
 
     /* =========================================
        ESTILOS ANALISIS SEMANAL CM
@@ -172,12 +277,10 @@
     }
     .section-separator span { background: #111; padding: 0 15px; color: var(--accent); font-family: 'Playfair Display', serif; font-size: 18px; text-transform: uppercase; letter-spacing: 2px;}
 
-    /* Contenedor de Tablas */
     .tables-wrapper { display: flex; flex-direction: column; gap: 30px; }
     .dual-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media(max-width: 600px) { .dual-tables { grid-template-columns: 1fr; } }
 
-    /* Estilo de Tablas */
     .cm-table {
         width: 100%; border-collapse: collapse; 
         background: var(--glass-bg); backdrop-filter: blur(4px);
@@ -185,14 +288,11 @@
         border: 1px solid var(--glass-border);
     }
     .cm-table th, .cm-table td { padding: 10px 8px; text-align: center; color: white; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    
-    /* Centrado del encabezado TIPO */
     .cm-table th { background: rgba(0,0,0,0.4); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
     .cm-table th:first-child { text-align: center; width: 40%; padding-left: 0; }
     
-    /* MODIFICACION INPUTS Y PORCENTAJE (SUTILEZA) */
     .cm-input {
-        width: 60%; /* Reducido para que quepa el % */
+        width: 60%; 
         background: transparent; border: none; color: white;
         text-align: center; font-size: 15px; outline: none; font-weight: 600;
         border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 2px;
@@ -200,95 +300,95 @@
     }
     .cm-input:focus { border-bottom: 1px solid var(--accent); }
     
-    /* Nueva clase para el porcentaje */
-    .cm-diff {
-        font-size: 10px;
-        font-weight: 700;
-        margin-left: 4px;
-        display: inline-block;
-        min-width: 35px;
-        vertical-align: middle;
-        text-align: left;
-    }
-    
-    /* Aseguramos que el contenido de la celda no se rompa */
-    .cm-table td:last-child {
-        white-space: nowrap;
-        padding-right: 5px;
-    }
+    .cm-diff { font-size: 10px; font-weight: 700; margin-left: 4px; display: inline-block; min-width: 35px; vertical-align: middle; text-align: left; }
+    .cm-table td:last-child { white-space: nowrap; padding-right: 5px; }
 
-    /* Colores dinámicos */
     .status-ok { color: var(--accent) !important; }
     .status-bad { color: var(--red-alert) !important; }
-    
-    /* Colores para el texto del porcentaje */
     .trend-bad { color: var(--red-alert) !important; }
     .trend-good { color: var(--accent) !important; }
     .trend-equal { color: #888; opacity: 0.5; }
 
-    /* Header de cada tabla (ej: Global, Señora) */
-    .table-caption {
-        font-family: 'Playfair Display', serif; font-size: 18px; color: white;
-        text-align: center; background: rgba(255,255,255,0.1); padding: 8px; font-weight: 700;
-    }
+    .table-caption { font-family: 'Playfair Display', serif; font-size: 18px; color: white; text-align: center; background: rgba(255,255,255,0.1); padding: 8px; font-weight: 700; }
 
-    /* =========================================
-       ESTILOS GENERALES SECCIONES DE DINERO
+   /* =========================================
+       ESTILOS GENERALES SECCIONES DE DINERO (RECARGA Y FONDO)
        ========================================= */
-    .money-section {
-        padding: 15px 15px; margin-top: 30px; margin-bottom: 80px;
-        max-width: 900px; margin-left: auto; margin-right: auto;
-        font-family: 'Inter', sans-serif; border-top: 1px solid #333; padding-top: 40px;
+       .money-section {
+        padding: 20px 15px; margin-top: 10px; margin-bottom: 60px;
+        max-width: 600px; margin-left: auto; margin-right: auto;
+        font-family: 'Inter', sans-serif;
     }
 
-    .aco-header { text-align: center; margin-bottom: 15px; }
-    .aco-header h2 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 0px; }
-    .aco-header h3 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 400; color: #ccc; }
+    .aco-header { text-align: center; margin-bottom: 30px; }
+    .aco-header h2 { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 5px; color: #fff; }
+    .aco-header h3 { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 3px; }
 
-    .date-row { text-align: center; margin-bottom: 20px; }
-    .fecha-dinamica { font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: 1px; }
+    .date-row { text-align: center; margin-bottom: 35px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+    .fecha-dinamica { font-size: 13px; font-weight: 400; color: #aaa; text-transform: uppercase; letter-spacing: 2px; }
 
-    .personal-data-row { display: flex; gap: 20px; margin-bottom: 25px; }
+    /* Entradas de personal (Fondo ACO) */
+    .personal-data-row { display: flex; gap: 20px; margin-bottom: 35px; }
     .data-group.name-group { flex: 3; display: flex; flex-direction: column; }
     .data-group.code-group { flex: 1; display: flex; flex-direction: column; }
-    
-    .aco-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-bottom: 4px; }
-    .aco-input-text { background: transparent; border: none; border-bottom: 1px solid white; color: white; font-size: 16px; padding: 2px 0; width: 100%; outline: none; }
+    .aco-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #777; margin-bottom: 8px; }
+    .aco-input-text { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: white; font-size: 16px; padding: 5px 0; width: 100%; outline: none; transition: 0.3s; }
+    .aco-input-text:focus { border-bottom-color: #fff; }
 
-    .aco-money-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
-    .col-money { display: flex; flex-direction: column; gap: 8px; }
+    /* Grid de Billetes/Monedas alineado y limpio */
+    .aco-money-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; margin-bottom: 15px;}
+    @media(max-width: 480px) { .aco-money-grid { gap: 15px; } }
+    .col-money { display: flex; flex-direction: column; gap: 12px; }
 
-    .money-row { display: flex; align-items: flex-end; justify-content: flex-start; font-size: 22px; width: 100%; }
-    .money-label { font-weight: 400; width: 85px; text-align: left; flex-shrink: 0; }
-    .money-input {
-        background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.5);
-        color: white; font-size: 22px; flex-grow: 1; width: 100%; text-align: center; outline: none; padding-bottom: 0px;
+    .money-row { 
+        display: flex; align-items: center; justify-content: space-between; 
+        border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;
+        transition: border-color 0.3s ease;
     }
-    .money-input:focus { border-bottom: 2px solid var(--accent); }
-
-    /* FOOTER DINERO */
-    .footer-container { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; gap: 10px; }
-    .total-section { text-align: left; flex: 0 0 auto; margin-right: 15px; }
-    .total-display { font-size: 26px; font-weight: 400; margin-bottom: 12px; line-height: 1; white-space: nowrap; }
-    .total-display span { font-weight: 700; color: var(--accent); }
-
-    .small-calc { font-size: 13px; margin-top: 8px; display: flex; justify-content: flex-start; align-items: baseline; gap: 6px; color: #ccc; }
-    .small-calc span:first-child { white-space: nowrap; }
+    .money-row:focus-within { border-bottom-color: #fff; }
+    .money-label { font-weight: 400; font-size: 18px; color: #ccc; flex-shrink: 0; }
     
-    .input-money-wrapper { display: flex; align-items: center; border-bottom: 1px solid #777; width: 80px; padding-bottom: 2px; }
-    .money-symbol { font-size: 13px; color: white; margin-right: 0px; }
-    .small-input { background: transparent; border: none; color: white; text-align: right; width: 100%; font-size: 14px; outline: none; padding: 0; }
-    .diff-display { font-weight: 700; font-size: 15px; }
+    .money-input {
+        background: transparent; border: none; color: white; font-size: 20px; 
+        width: 100px; text-align: right; outline: none; font-weight: 600;
+    }
+    .money-input::placeholder { color: rgba(255,255,255,0.1); }
 
-    .signature-section { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; padding-bottom: 5px; }
-    .signature-line { width: 140px; height: 1px; background: white; margin-bottom: 8px; }
-    #firma-nombre { font-size: 12px; font-weight: 700; text-transform: uppercase; }
-    #firma-codigo { font-size: 11px; color: #ccc; }
+   /* Panel inferior integrado (Total y Diferencia) */
+   .footer-container { 
+        display: flex; flex-direction: column; gap: 15px; 
+        padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); 
+    }
+    
+    .total-section { width: 100%; display: flex; flex-direction: column; gap: 15px; margin-right: 0; }
+    
+    .total-display { 
+        font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 400; 
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 5px; color: #fff;
+    }
+    .total-display span { font-weight: 700; color: #fff; }
+    
+    .input-money-wrapper { display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.3); width: 120px; transition: 0.3s; padding-bottom: 0;}
+    .input-money-wrapper:focus-within { border-bottom-color: #fff; }
+    .money-symbol { font-size: 14px; color: #888; margin-right: 5px; }
+    .small-input { background: transparent; border: none; color: white; text-align: right; width: 100%; font-size: 16px; outline: none; padding: 4px; font-weight: 600;}
+    
+    .diff-display { font-weight: 700; font-size: 18px; }
+
+    /* Firma (Para el Fondo Físico) */
+    .signature-section { text-align: center; margin-top: 30px; display: flex; flex-direction: column; align-items: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); width: 100%; }
+    .signature-line { width: 180px; height: 1px; background: rgba(255,255,255,0.5); margin-bottom: 12px; }
+    #firma-nombre { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: #fff;}
+    #firma-codigo { font-size: 10px; color: #666; letter-spacing: 1px; margin-top: 4px;}
 
   </style>
 </head>
 <body>
-
+  <div id="splash-screen">
+    <div class="splash-title">PULL&BEAR</div>
+    <div class="splash-subtitle">ANDARES 5344</div>
+  </div>
   <div id="menu-overlay" aria-hidden="true"></div>
 
   <div id="sidebar" aria-hidden="true">
@@ -303,59 +403,122 @@
 
   <div class="topbar" id="top">
     <div class="brand">
-      <img alt="Pull&Bear" src="https://blackdevice.com/wp-content/uploads/2025/03/logo-pull-bear.png"/><br>  
-      <div id="menu-btn" role="button" aria-label="Abrir menú">
-        5092 <br>
-      </div>
+      <span class="brand-title">PULL&BEAR</span>
+      <span class="brand-text">ANDARES 5344</span>
+    </div>
+    <div id="menu-btn" role="button" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
   </div>
 
-  <h1 id="materialc" class="title">Material de camion</h1>
+  <h1 id="materialc" class="title">Material De Camión</h1>
 
   <main class="container-xxl px-3 px-md-4">
-    <section class="grid">
-      <article class="card" id="card-senora">
-        <div class="photo">
-          <img alt="Señora" src="https://static.pullandbear.net/assets/public/923e/6268/9cef48938b12/c6cd60b47a10/03245317250-A1M/03245317250-A1M.jpg?ts=1739446871774&w=541&f=auto"/>
-        </div>
-        <div class="panel">
-          <div class="row"><div class="card-title">Plegables</div></div>
-          <div class="ro">
-            <div class="card-title2">Buffer</div>
-            <div class="card-title3" id="senora-buffer">0</div>
-          </div>
-          <div class="ro">
-            <div class="card-title2 ">Piso</div>
-            <div class="card-title3" id="senora-piso">0</div>
-          </div>
-          <div class="row"></div>
-          <div class="inputrap"> 
-            <input class="input-linea" id="senora-input" inputmode="numeric" placeholder="UNIDADES"/>
-          </div>
-        </div>
-      </article>
+    <div class="tabs-wrapper">
+      <button class="tab-btn active" data-tab="total">Total</button>
+      <button class="tab-btn" data-tab="espana">España</button>
+      <button class="tab-btn" data-tab="mexico">México</button>
+    </div>
 
-      <article class="card" id="card-caballero">
-        <div class="photo">
-          <img alt="Caballero" src="https://static.pullandbear.net/assets/public/0fa4/d009/e2014070b6c7/8d0975323189/03245520826-A1M/03245520826-A1M.jpg?ts=1735567421822&w=1082&f=auto"/>
+    <section class="grid">
+      
+      <div class="flip-card">
+        <div class="flip-card-inner" id="inner-senora" style="transform: rotateY(0deg);">
+          
+          <article class="flip-card-face card" id="senora-total" style="transform: rotateY(0deg); display: block;">
+            <div class="photo"><img alt="Señora" src="https://static.pullandbear.net/assets/public/923e/6268/9cef48938b12/c6cd60b47a10/03245317250-A1M/03245317250-A1M.jpg?ts=1739446871774&w=541&f=auto"/></div>
+            <div class="panel">
+              <div class="row"><div class="card-title">Plegables</div></div>
+              <div class="ro"><div class="card-title2">Buffer</div><div class="card-title3" id="senora-buffer-total">0</div></div>
+              <div class="ro"><div class="card-title2 ">Piso</div><div class="card-title3" id="senora-piso-total">0</div></div>
+              <div class="row"></div>
+              <div class="inputrap"> 
+                <input class="input-linea calc-input" id="senora-input-total" data-side="senora" data-tab="total" inputmode="numeric" placeholder="Unidades"/>
+              </div>
+            </div>
+          </article>
+
+          <article class="flip-card-face card" id="senora-espana" style="transform: rotateY(180deg);">
+            <div class="photo"><img alt="Señora" src="https://static.pullandbear.net/assets/public/923e/6268/9cef48938b12/c6cd60b47a10/03245317250-A1M/03245317250-A1M.jpg?ts=1739446871774&w=541&f=auto"/></div>
+            <div class="panel">
+              <div class="row"><div class="card-title">Plegables</div></div>
+              <div class="ro"><div class="card-title2">Buffer</div><div class="card-title3" id="senora-buffer-espana">0</div></div>
+              <div class="ro"><div class="card-title2 ">Piso</div><div class="card-title3" id="senora-piso-espana">0</div></div>
+              <div class="row"></div>
+              <div class="inputrap"> 
+                <input class="input-linea calc-input" id="senora-input-espana" data-side="senora" data-tab="espana" inputmode="numeric" placeholder="Unidades"/>
+              </div>
+            </div>
+          </article>
+
+          <article class="flip-card-face card" id="senora-mexico" style="transform: rotateY(180deg);">
+            <div class="photo"><img alt="Señora" src="https://static.pullandbear.net/assets/public/923e/6268/9cef48938b12/c6cd60b47a10/03245317250-A1M/03245317250-A1M.jpg?ts=1739446871774&w=541&f=auto"/></div>
+            <div class="panel">
+              <div class="row"><div class="card-title">Plegables</div></div>
+              <div class="ro"><div class="card-title2">Buffer</div><div class="card-title3" id="senora-buffer-mexico">0</div></div>
+              <div class="ro"><div class="card-title2 ">Piso</div><div class="card-title3" id="senora-piso-mexico">0</div></div>
+              <div class="row"></div>
+              <div class="inputrap"> 
+                <input class="input-linea calc-input" id="senora-input-mexico" data-side="senora" data-tab="mexico" inputmode="numeric" placeholder="Unidades"/>
+              </div>
+            </div>
+          </article>
+
         </div>
-        <div class="panel">
-          <div class="row"><div class="card-title">Plegables</div></div>
-          <div class="ro">
-            <div class="card-title2">Buffer</div>
-            <div class="card-title3" id="caballero-buffer">0</div>
-          </div>
-          <div class="ro">
-            <div class="card-title2">Piso</div>
-            <div class="card-title3" id="caballero-piso">0</div>
-          </div>
-          <div class="row"></div>
-          <div class="inputWrp">
-            <input class="input-linea" id="caballero-input" inputmode="numeric" placeholder="UNIDADES"/>
-          </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner" id="inner-caballero" style="transform: rotateY(0deg);">
+          
+          <article class="flip-card-face card" id="caballero-total" style="transform: rotateY(0deg); display: block;">
+            <div class="photo"><img alt="Caballero" src="https://static.pullandbear.net/assets/public/0fa4/d009/e2014070b6c7/8d0975323189/03245520826-A1M/03245520826-A1M.jpg?ts=1735567421822&w=1082&f=auto"/></div>
+            <div class="panel">
+              <div class="row"><div class="card-title">Plegables</div></div>
+              <div class="ro"><div class="card-title2">Buffer</div><div class="card-title3" id="caballero-buffer-total">0</div></div>
+              <div class="ro"><div class="card-title2">Piso</div><div class="card-title3" id="caballero-piso-total">0</div></div>
+              <div class="row"></div>
+              <div class="inputWrp">
+                <input class="input-linea calc-input" id="caballero-input-total" data-side="caballero" data-tab="total" inputmode="numeric" placeholder="Unidades"/>
+              </div>
+            </div>
+          </article>
+
+          <article class="flip-card-face card" id="caballero-espana" style="transform: rotateY(180deg);">
+            <div class="photo"><img alt="Caballero" src="https://static.pullandbear.net/assets/public/0fa4/d009/e2014070b6c7/8d0975323189/03245520826-A1M/03245520826-A1M.jpg?ts=1735567421822&w=1082&f=auto"/></div>
+            <div class="panel">
+              <div class="row"><div class="card-title">Plegables</div></div>
+              <div class="ro"><div class="card-title2">Buffer</div><div class="card-title3" id="caballero-buffer-espana">0</div></div>
+              <div class="ro"><div class="card-title2">Piso</div><div class="card-title3" id="caballero-piso-espana">0</div></div>
+              <div class="row"></div>
+              <div class="inputWrp">
+                <input class="input-linea calc-input" id="caballero-input-espana" data-side="caballero" data-tab="espana" inputmode="numeric" placeholder="Unidades"/>
+              </div>
+            </div>
+          </article>
+
+          <article class="flip-card-face card" id="caballero-mexico" style="transform: rotateY(180deg);">
+            <div class="photo"><img alt="Caballero" src="https://static.pullandbear.net/assets/public/0fa4/d009/e2014070b6c7/8d0975323189/03245520826-A1M/03245520826-A1M.jpg?ts=1735567421822&w=1082&f=auto"/></div>
+            <div class="panel">
+              <div class="row"><div class="card-title">Plegables</div></div>
+              <div class="ro"><div class="card-title2">Buffer</div><div class="card-title3" id="caballero-buffer-mexico">0</div></div>
+              <div class="ro"><div class="card-title2">Piso</div><div class="card-title3" id="caballero-piso-mexico">0</div></div>
+              <div class="row"></div>
+              <div class="inputWrp">
+                <input class="input-linea calc-input" id="caballero-input-mexico" data-side="caballero" data-tab="mexico" inputmode="numeric" placeholder="Unidades"/>
+              </div>
+            </div>
+          </article>
+
         </div>
-      </article>
+      </div>
     </section>
+
+    <div class="save-btn-container">
+      <button id="btn-guardar-pdf" class="btn-guardar">Guardar PDF</button>
+    </div>
+
   </main>
 
   <section id="manual-section">
@@ -513,6 +676,16 @@
                         <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
                         <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
                     </tr>
+                    <tr>
+                      <td>Piso</td>
+                      <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
+                      <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
+                  </tr>
+                  <tr>
+                      <td>Almacén</td>
+                      <td><input class="cm-input past-val" inputmode="decimal" data-type="percent"></td>
+                      <td><input class="cm-input curr-val" inputmode="decimal" data-type="percent"><span class="cm-diff"></span></td>
+                  </tr>
                 </tbody>
             </table>
         </div>
@@ -605,12 +778,15 @@
         </div>
 
     </div>
+    <div class="save-btn-container" style="margin-top: 20px;">
+      <button id="btn-guardar-analisis" class="btn-guardar">Guardar PDF</button>
+    </div>
   </section>
 
   <section id="section-recarga" class="money-section">
     <div class="aco-header">
         <h2>Recarga ACO</h2>
-        <h3>Galerias Guadalajara 5092</h3>
+        
     </div>
     <div class="date-row">
           <div class="fecha-dinamica" id="recarga-fecha">DD / MM / YYYY</div>
@@ -651,7 +827,7 @@
   <section id="section-aco" class="money-section">
     <div class="aco-header">
         <h2>Fondo físico ACO</h2>
-        <h3>Galerias Guadalajara 5092</h3>
+        
     </div>
     <div class="date-row">
           <div class="fecha-dinamica" id="aco-fecha">DD / MM / YYYY</div>
@@ -659,11 +835,11 @@
     <div class="personal-data-row">
         <div class="data-group name-group">
             <label class="aco-label">Nombre Completo</label>
-            <input type="text" class="aco-input-text" id="aco-nombre" placeholder="NOMBRE" autocomplete="off">
+            <input type="text" class="aco-input-text" id="aco-nombre" placeholder="JUAN PEREZ" autocomplete="off">
         </div>
         <div class="data-group code-group">
             <label class="aco-label">Codigo</label>
-            <input type="text" inputmode="numeric" class="aco-input-text" id="aco-codigo" placeholder="000000" maxlength="6">
+            <input type="text" inputmode="numeric" class="aco-input-text" id="aco-codigo" placeholder="112233" maxlength="6">
         </div>
     </div>
 
@@ -685,28 +861,35 @@
     </div>
 
     <div class="footer-container">
-        <div class="total-section">
-            <div class="total-display">Total = <span id="aco-total">$0</span></div>
-            <div class="small-calc">
-                <span>Fondo previo:</span>
-                <div class="input-money-wrapper"><span class="money-symbol">$</span><input type="text" inputmode="numeric" id="aco-previo" class="small-input" placeholder="0"></div>
-            </div>
-            <div class="small-calc">
-                <span>Diferencia:</span>
-                <span id="aco-diferencia" class="diff-display">$0</span>
-            </div>
-        </div>
-        <div class="signature-section">
-            <div class="signature-line"></div>
-            <div id="firma-nombre">NOMBRE EMPLEADO</div>
-            <div id="firma-codigo">CODIGO</div>
-        </div>
-    </div>
+      <div class="total-section">
+          <div class="total-display">Total = <span id="aco-total">$0</span></div>
+          <div class="small-calc">
+              <span>Fondo previo:</span>
+              <div class="input-money-wrapper"><span class="money-symbol">$</span><input type="text" inputmode="numeric" id="aco-previo" class="small-input" placeholder="0"></div>
+          </div>
+          <div class="small-calc">
+              <span>Diferencia:</span>
+              <span id="aco-diferencia" class="diff-display">$0</span>
+          </div>
+      </div>
+  </div>
+  
+  <div class="save-btn-container" style="margin-top: 40px; margin-bottom: 0px;">
+    <button id="btn-guardar-aco" class="btn-guardar">Guardar PDF</button>
+  </div>
+</section>
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script>
+    /* === PANTALLA DE CARGA === */
+    setTimeout(() => {
+        const splash = document.getElementById("splash-screen");
+        if (splash) {
+            splash.classList.add("fade-out");
+        }
+    }, 2000); // 2000 milisegundos = 2 segundos
   document.addEventListener("DOMContentLoaded", () => {
     
     /* === MENÚ Y NAVEGACIÓN === */
@@ -728,24 +911,257 @@
       });
     });
 
-    /* === LÓGICA CAMIÓN === */
+    /* === LÓGICA TABS 3D FLIP === */
+    const tabBtnsArr = Array.from(document.querySelectorAll('.tab-btn'));
+    const tabs = ['total', 'espana', 'mexico'];
+    let currentTabIndex = 0;
+    let currentRot = 0;
+    let flipTimeout;
+
+    tabBtnsArr.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        if (index === currentTabIndex) return;
+
+        // Actualizar visual de los botones
+        tabBtnsArr.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Calcular dirección. Derecha a Izquierda = girar a la izquierda (-1), Izquierda a Derecha = girar a la derecha (1)
+        const diff = index - currentTabIndex;
+        const direction = diff > 0 ? -1 : 1; 
+        currentRot += direction * 180;
+
+        const targetTabName = tabs[index];
+        clearTimeout(flipTimeout);
+
+        ['senora', 'caballero'].forEach(side => {
+          const targetFace = document.getElementById(`${side}-${targetTabName}`);
+          const inner = document.getElementById(`inner-${side}`);
+
+          // 1. Preparar la cara objetivo para que esté alineada con el contenedor ANTES de girar
+          targetFace.style.display = 'block';
+          targetFace.style.transform = `rotateY(${currentRot}deg)`;
+
+          // Forzar un reflow para que el display:block asiente antes de la transición CSS
+          void targetFace.offsetWidth;
+
+          // 2. Girar el contenedor completo 180 grados
+          inner.style.transform = `rotateY(${currentRot}deg)`;
+        });
+
+        // 3. Limpiar caras ocultas exactamente al terminar la animación (0.8s) para no estorbar
+        flipTimeout = setTimeout(() => {
+          ['senora', 'caballero'].forEach(side => {
+            tabs.forEach((t, i) => {
+              if (i !== index) {
+                document.getElementById(`${side}-${t}`).style.display = 'none';
+              }
+            });
+          });
+        }, 800);
+
+        currentTabIndex = index;
+      });
+    });
+
+    // Fórmulas matemáticas
     function redondear(valor){ return Math.round(Number(valor)); }
     function calcularSenora(unidades){
-      const u = Number(unidades) || 0; return {buffer:redondear((u*0.6)/25/5), piso:redondear((u*0.4)/25/4)};
+      const u = Number(unidades) || 0; return {buffer:redondear((u*0.7)/35/5), piso:redondear((u*0.3)/35/4)};
     }
     function calcularCaballero(unidades){
-      const u = Number(unidades) || 0; return {buffer:redondear((u*0.6)/20/5), piso:redondear((u*0.4)/20/4)};
+      const u = Number(unidades) || 0; return {buffer:redondear((u*0.7)/35/5), piso:redondear((u*0.3)/35/4)};
     }
-    function actualizar(side, vals){
-      const buf = document.getElementById(`${side}-buffer`); const pis = document.getElementById(`${side}-piso`);
-      if(buf) buf.textContent = isFinite(vals.buffer)? vals.buffer : 0;
-      if(pis) pis.textContent = isFinite(vals.piso)? vals.piso : 0;
+
+    // Actualiza los números visuales en pantalla
+    function actualizarCantidades(tab, side, unidades) {
+        let calcs = side === 'senora' ? calcularSenora(unidades) : calcularCaballero(unidades);
+        document.getElementById(`${side}-buffer-${tab}`).textContent = isFinite(calcs.buffer) ? calcs.buffer : 0;
+        document.getElementById(`${side}-piso-${tab}`).textContent = isFinite(calcs.piso) ? calcs.piso : 0;
     }
-    const senInput = document.getElementById("senora-input");
-    const cabInput = document.getElementById("caballero-input");
-    function sanitize(val){ return val.toString().replace(/[^0-9.]/g,''); }
-    if(senInput) senInput.addEventListener("input", (e) => { e.target.value = sanitize(e.target.value); actualizar('senora', calcularSenora(Number(e.target.value) || 0)); });
-    if(cabInput) cabInput.addEventListener("input", (e) => { e.target.value = sanitize(e.target.value); actualizar('caballero', calcularCaballero(Number(e.target.value) || 0)); });
+
+    // Suma España y México y lo manda a Total
+    function syncTotales(side) {
+        const valEspana = Number(document.getElementById(`${side}-input-espana`).value) || 0;
+        const valMexico = Number(document.getElementById(`${side}-input-mexico`).value) || 0;
+        const suma = valEspana + valMexico;
+
+        const inputTotal = document.getElementById(`${side}-input-total`);
+        inputTotal.value = suma > 0 ? suma : ""; 
+        actualizarCantidades('total', side, suma);
+    }
+
+    // Escucha cada vez que se escribe en un input
+    document.querySelectorAll('.calc-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9.]/g,''); // Evita letras
+            const val = Number(e.target.value) || 0;
+            const tab = e.target.dataset.tab;
+            const side = e.target.dataset.side;
+
+            // Actualiza la pestaña en la que estás escribiendo
+            actualizarCantidades(tab, side, val);
+
+            // Si estás en España o México, actualiza el Total en segundo plano
+            if (tab === 'espana' || tab === 'mexico') {
+                syncTotales(side);
+            }
+        });
+    });
+
+    /* =========================================
+       LÓGICA GENERAR PDF (AMBAS SECCIONES)
+       ========================================= */
+       
+    // 1. PDF MATERIAL DE CAMIÓN
+    const btnGuardarPdf = document.getElementById("btn-guardar-pdf");
+    if(btnGuardarPdf) {
+        btnGuardarPdf.addEventListener("click", () => {
+            // Llamamos a la librería directamente para evitar conflictos
+            const doc = new window.jspdf.jsPDF();
+
+            doc.setFillColor(17, 17, 17);
+            doc.rect(0, 0, 210, 45, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.text("MATERIAL DE CAMIÓN", 105, 22, { align: "center" });
+            
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            const dateStr = document.querySelector(".cm-date-today").textContent; 
+            doc.text(`PULL&BEAR ANDARES 5344   |   Fecha: ${dateStr}`, 105, 32, { align: "center" });
+
+            doc.setTextColor(0, 0, 0); 
+            let y = 60; 
+
+            const tabsToExport = [
+                { id: 'total', title: 'TOTAL GENERAL' },
+                { id: 'espana', title: 'ESPAÑA' },
+                { id: 'mexico', title: 'MÉXICO' }
+            ];
+
+            tabsToExport.forEach(tab => {
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(14);
+                doc.setDrawColor(200, 200, 200);
+                doc.setFillColor(245, 245, 245);
+                doc.rect(15, y - 7, 180, 12, 'F');
+                doc.text(tab.title, 20, y);
+                y += 15;
+
+                const sInp = document.getElementById(`senora-input-${tab.id}`).value || "0";
+                const sBuf = document.getElementById(`senora-buffer-${tab.id}`).textContent || "0";
+                const sPis = document.getElementById(`senora-piso-${tab.id}`).textContent || "0";
+                
+                const cInp = document.getElementById(`caballero-input-${tab.id}`).value || "0";
+                const cBuf = document.getElementById(`caballero-buffer-${tab.id}`).textContent || "0";
+                const cPis = document.getElementById(`caballero-piso-${tab.id}`).textContent || "0";
+
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text("SEÑORA", 35, y);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Unidades: ${sInp}`, 35, y + 8);
+                doc.text(`Buffer: ${sBuf}`, 35, y + 16);
+                doc.text(`Piso: ${sPis}`, 35, y + 24);
+
+                doc.setFont("helvetica", "bold");
+                doc.text("CABALLERO", 125, y);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Unidades: ${cInp}`, 125, y + 8);
+                doc.text(`Buffer: ${cBuf}`, 125, y + 16);
+                doc.text(`Piso: ${cPis}`, 125, y + 24);
+
+                y += 40; 
+            });
+
+            doc.setFontSize(10);
+            doc.setTextColor(150, 150, 150);
+            doc.text("Generado automáticamente desde Procesos P&B App", 105, 282, { align: "center" });
+            doc.text("Diseñado y desarrollado por Brandon Estrada.", 105, 288, { align: "center" });
+
+            const nombreArchivo = `Material_Camion_${dateStr.replace(/\//g, '-')}.pdf`;
+            doc.save(nombreArchivo);
+        });
+    }
+
+    // 2. PDF ANÁLISIS SEMANAL CM
+    const btnGuardarAnalisis = document.getElementById("btn-guardar-analisis");
+    if(btnGuardarAnalisis) {
+        btnGuardarAnalisis.addEventListener("click", () => {
+            const doc = new window.jspdf.jsPDF();
+
+            doc.setFillColor(17, 17, 17);
+            doc.rect(0, 0, 210, 45, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.text("ANÁLISIS SEMANAL CUADRO DE MERMA", 105, 22, { align: "center" });
+            
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            const dateToday = document.querySelector(".cm-date-today").textContent;
+            doc.text(`PULL&BEAR ANDARES 5344   |   Fecha: ${dateToday}`, 105, 32, { align: "center" });
+
+            let currentY = 55;
+            const tablasHTML = document.querySelectorAll('#section-analisis .table-container');
+
+            tablasHTML.forEach(contenedor => {
+                if (currentY > 250) {
+                    doc.addPage();
+                    currentY = 20;
+                }
+
+                const titulo = contenedor.querySelector('.table-caption').textContent;
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text(titulo, 14, currentY);
+                currentY += 5;
+
+                const filas = contenedor.querySelectorAll('tbody tr');
+                let datosTabla = [];
+
+                filas.forEach(fila => {
+                    const tipo = fila.cells[0].textContent;
+                    const pasado = fila.querySelector('.past-val').value || "-";
+                    const hoy = fila.querySelector('.curr-val').value || "-";
+                    const diferenciaSpan = fila.querySelector('.cm-diff');
+                    const diferencia = diferenciaSpan ? diferenciaSpan.textContent : "";
+                    
+                    datosTabla.push([tipo, pasado, hoy, diferencia]);
+                });
+
+                // Se usa el plugin AutoTable
+                doc.autoTable({
+                    startY: currentY,
+                    head: [['Indicador', 'Pasado', 'Actual', 'Diferencia']],
+                    body: datosTabla,
+                    theme: 'grid',
+                    headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
+                    bodyStyles: { halign: 'center', textColor: [40, 40, 40] },
+                    columnStyles: { 0: { halign: 'left', fontStyle: 'bold' } },
+                    margin: { left: 14, right: 14 },
+                    styles: { fontSize: 10, cellPadding: 3, lineColor: [220, 220, 220] }
+                });
+
+                currentY = doc.lastAutoTable.finalY + 15;
+            });
+
+            const totalPages = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= totalPages; i++) {
+                doc.setPage(i);
+                doc.setFontSize(10);
+                doc.setTextColor(150, 150, 150);
+                doc.text("Generado automáticamente desde Procesos P&B App.", 105, 282, { align: "center" });
+                doc.text("Diseñado y desarrollado por Brandon Estrada.", 105, 288, { align: "center" });
+            }
+
+            const nombreArchivo = `Analisis_Semanal_${dateToday.replace(/\//g, '-')}.pdf`;
+            doc.save(nombreArchivo);
+        });
+    }
 
     /* === LÓGICA CUENTA PERSONAS MANUAL === */
     let contadorManual = 0;
@@ -821,47 +1237,39 @@
     function compareAndColor(row) {
         const pastInput = row.querySelector('.past-val');
         const currInput = row.querySelector('.curr-val');
-        const diffSpan = row.querySelector('.cm-diff'); // Seleccionamos el span
+        const diffSpan = row.querySelector('.cm-diff');
         
         if(!pastInput || !currInput || !diffSpan) return;
 
         currInput.classList.remove('status-ok', 'status-bad');
-        diffSpan.textContent = ''; // Limpiar span
-        diffSpan.className = 'cm-diff'; // Limpiar clases de color
+        diffSpan.textContent = ''; 
+        diffSpan.className = 'cm-diff'; 
         
-        // Verificamos si hay dígitos para comparar
         if(!/[0-9]/.test(pastInput.value) || !/[0-9]/.test(currInput.value)) return;
 
         const past = parseCMValue(pastInput.value);
         const curr = parseCMValue(currInput.value);
         
-        // 1. Calcular Diferencia y Porcentaje
         let diff = curr - past;
         let percentage = 0;
         
         if (past !== 0) {
             percentage = (diff / past) * 100;
         } else {
-            // Si el pasado era 0 y hoy hay dato, es un aumento del 100% (o infinito, pero usamos 100 para visualizar)
             percentage = curr > 0 ? 100 : 0;
         }
 
-        // 2. Mostrar texto en el span (+10% o -5%)
         const sign = diff > 0 ? '+' : '';
-        // Solo mostramos porcentaje si hay diferencia
         if(curr !== past) {
              diffSpan.textContent = sign + Math.round(percentage) + '%';
         }
 
-        // 3. Lógica de Colores (Inversa vs Normal)
         const isInverse = currInput.dataset.inverse === "true";
         let isBetter = false;
 
         if (isInverse) {
-            // Lógica Inversa (Rankings, Rendimiento): MAS ALTO ES MEJOR (Verde)
             isBetter = curr > past;
         } else {
-            // Lógica Normal (Merma, Gastos): MAS BAJO ES MEJOR (Verde)
             isBetter = curr < past;
         }
 
@@ -869,38 +1277,29 @@
             diffSpan.classList.add('trend-equal');
         } else if (isBetter) {
             currInput.classList.add('status-ok');
-            diffSpan.classList.add('trend-good'); // Verde
+            diffSpan.classList.add('trend-good'); 
         } else {
             currInput.classList.add('status-bad');
-            diffSpan.classList.add('trend-bad'); // Rojo
+            diffSpan.classList.add('trend-bad'); 
         }
     }
 
-    // Listeners para inputs de Análisis
     document.querySelectorAll('.cm-input').forEach(inp => {
-        
-        // 1. Al hacer foco, quitamos formato para editar fácil el número
         inp.addEventListener('focus', (e) => {
             let cleanVal = e.target.value.replace(/[^0-9.]/g, '');
             if(cleanVal) e.target.value = cleanVal;
         });
 
-        // 2. Al perder foco, aplicamos el formato bonito
         inp.addEventListener('blur', (e) => {
             formatCMInput(e.target, e.target.dataset.type);
         });
         
-        // 3. Al escribir, bloqueamos letras y ejecutamos lógica de color
         inp.addEventListener('input', (e) => {
-            // a) Bloquear letras (Sanitización)
             e.target.value = e.target.value.replace(/[^0-9.]/g, '');
-
-            // b) Lógica de colores y porcentaje
             const row = e.target.closest('tr');
             compareAndColor(row);
         });
     });
-
 
     /* === RECARGA ACO === */
     const recContainer = document.getElementById("section-recarga");
@@ -915,7 +1314,7 @@
         recTotal.textContent = "$" + formatMoney(suma);
         const diff = suma - parseLocaleNumber(recPrev.value);
         recDiff.textContent = "$" + formatMoney(diff);
-        recDiff.style.color = diff < 0 ? "var(--red-alert)" : "var(--accent)";
+        recDiff.style.color = diff < 0 ? "var(--red-alert)" : "#ffffff";
     }
     recPrev.addEventListener("input", (e) => formatInputListener(e, calcRecarga));
     recInputs.forEach(inp => inp.addEventListener("input", (e) => formatInputListener(e, calcRecarga)));
@@ -927,17 +1326,14 @@
     const acoPrev = document.getElementById("aco-previo");
     const acoDiff = document.getElementById("aco-diferencia");
     const inpNom = document.getElementById("aco-nombre");
-    const firmNom = document.getElementById("firma-nombre");
     const inpCod = document.getElementById("aco-codigo");
-    const firmCod = document.getElementById("firma-codigo");
 
+    // Limitar y formatear Nombre y Código (sin la firma web)
     if(inpNom) inpNom.addEventListener("input", (e) => { 
-        let v = e.target.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '').toUpperCase(); 
-        e.target.value = v; firmNom.textContent = v || "NOMBRE EMPLEADO"; 
+        e.target.value = e.target.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '').toUpperCase(); 
     });
     if(inpCod) inpCod.addEventListener("input", (e) => { 
-        let v = e.target.value.replace(/[^0-9]/g, '').slice(0,6); 
-        e.target.value = v; firmCod.textContent = v || "CODIGO"; 
+        e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0,6); 
     });
 
     function calcAco() {
@@ -946,10 +1342,131 @@
         acoTotal.textContent = "$" + formatMoney(suma);
         const diff = suma - parseLocaleNumber(acoPrev.value);
         acoDiff.textContent = "$" + formatMoney(diff);
-        acoDiff.style.color = diff < 0 ? "var(--red-alert)" : "var(--accent)";
+        acoDiff.style.color = diff < 0 ? "var(--red-alert)" : "#ffffff";
     }
     acoPrev.addEventListener("input", (e) => formatInputListener(e, calcAco));
     acoInputs.forEach(inp => inp.addEventListener("input", (e) => formatInputListener(e, calcAco)));
+
+    /* === LÓGICA GENERAR PDF FONDO FÍSICO === */
+    const btnGuardarAco = document.getElementById("btn-guardar-aco");
+    if(btnGuardarAco) {
+        btnGuardarAco.addEventListener("click", () => {
+            const doc = new window.jspdf.jsPDF();
+
+            // 1. Diseño del Encabezado (Sin fondo negro para ahorrar tinta)
+            doc.setTextColor(0, 0, 0); // Texto negro
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.text("FONDO FÍSICO ACO", 105, 22, { align: "center" });
+            
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            const dateToday = document.getElementById("aco-fecha").textContent;
+            doc.text(`PULL&BEAR ANDARES 5344   |   Fecha: ${dateToday}`, 105, 32, { align: "center" });
+
+            // Línea separadora elegante
+            doc.setDrawColor(200, 200, 200);
+            doc.setLineWidth(0.5);
+            doc.line(15, 38, 195, 38);
+
+            // 2. Datos del Empleado
+            const nombreEmp = inpNom.value || "NO ESPECIFICADO";
+            const codigoEmp = inpCod.value || "------";
+
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("DATOS DEL EMPLEADO", 105, 50, { align: "center" });
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            doc.text(`${nombreEmp}`, 105, 58, { align: "center" });
+            doc.text(`${codigoEmp}`, 105, 65, { align: "center" });
+
+            // 3. Desglose de Efectivo (Tabla estructurada AutoTable)
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("DESGLOSE DE EFECTIVO", 105, 80, { align: "center" });
+
+            // Preparar los datos en formato de tabla (Monedas vs Billetes)
+            const valoresIzquierda = [1, 2, 5, 10, 20];
+            const valoresDerecha = [50, 100, 200, 500, 1000];
+            let datosTabla = [];
+
+            for(let i = 0; i < 5; i++) {
+                // Obtener datos lado izquierdo (Monedas)
+                let valIzq = valoresIzquierda[i];
+                let inpIzq = Array.from(acoInputs).find(inp => Number(inp.dataset.val) === valIzq);
+                let cantIzq = inpIzq ? (inpIzq.value || "0") : "0";
+                let impIzq = "$" + (Number(cantIzq.replace(/,/g,'')) * valIzq).toLocaleString('es-MX', {minimumFractionDigits: 2});
+
+                // Obtener datos lado derecho (Billetes)
+                let valDer = valoresDerecha[i];
+                let inpDer = Array.from(acoInputs).find(inp => Number(inp.dataset.val) === valDer);
+                let cantDer = inpDer ? (inpDer.value || "0") : "0";
+                let impDer = "$" + (Number(cantDer.replace(/,/g,'')) * valDer).toLocaleString('es-MX', {minimumFractionDigits: 2});
+
+                datosTabla.push([`$${valIzq}`, cantIzq, impIzq, `$${valDer}`, cantDer, impDer]);
+            }
+
+            // Dibujar la tabla
+            doc.autoTable({
+                startY: 85,
+                head: [['Monedas', 'Cantidad', 'Importe', 'Billetes', 'Cantidad', 'Importe']],
+                body: datosTabla,
+                theme: 'grid',
+                headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
+                bodyStyles: { halign: 'center', textColor: [40, 40, 40] },
+                columnStyles: { 
+                    0: { fontStyle: 'bold' }, 
+                    2: { halign: 'right' }, // Importe izquierdo alineado a la derecha
+                    3: { fontStyle: 'bold' },
+                    5: { halign: 'right' }  // Importe derecho alineado a la derecha
+                },
+                margin: { left: 15, right: 15 },
+                styles: { fontSize: 11, cellPadding: 4, lineColor: [200, 200, 200] }
+            });
+
+            // 4. Totales y Diferencia
+            let finalY = doc.lastAutoTable.finalY + 15; // Empezar debajo de la tabla
+            const total = acoTotal.textContent;
+            const previo = acoPrev.value || "0";
+            const diferencia = acoDiff.textContent;
+
+            doc.setDrawColor(200, 200, 200);
+            doc.line(40, finalY - 5, 170, finalY - 5);
+
+            doc.setFontSize(16);
+            doc.setFont("helvetica", "bold");
+            doc.text(`Total: ${total}`, 105, finalY + 5, { align: "center" });
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Fondo Previo reflejado: $${previo}`, 105, finalY + 15, { align: "center" });
+            
+            doc.setFont("helvetica", "bold");
+            if (diferencia.includes("-")) { doc.setTextColor(180, 0, 0); }
+            doc.text(`Diferencia: ${diferencia}`, 105, finalY + 25, { align: "center" });
+            doc.setTextColor(0, 0, 0);
+
+            // 5. Línea de Firma
+            let signY = finalY + 60;
+            doc.setDrawColor(0, 0, 0);
+            doc.line(65, signY, 145, signY);
+            doc.setFontSize(12);
+            doc.text(nombreEmp, 105, signY + 7, { align: "center" });
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`${codigoEmp}`, 105, signY + 13, { align: "center" });
+
+            // 6. Pie de página
+            doc.setFontSize(10);
+            doc.setTextColor(150, 150, 150);
+            doc.text("Generado automáticamente desde Procesos P&B App.", 105, 282, { align: "center" });
+                doc.text("Diseñado y desarrollado por Brandon Estrada.", 105, 288, { align: "center" });
+
+            const nombreArchivo = `Fondo_Fisico_${dateToday.replace(/\s\/\s/g, '-')}.pdf`;
+            doc.save(nombreArchivo);
+        });
+    }
 
   }); 
   </script>
