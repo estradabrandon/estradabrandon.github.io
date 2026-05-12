@@ -398,7 +398,7 @@
     <a href="#materialc" data-scroll-to="material">Contar material</a>
     <a href="#section-qr" data-scroll-to="qr">Generador QR</a>
     <a href="#manual-section" data-scroll-to="manual">Cuenta personas</a>
-    <a href="#section-analisis" data-scroll-to="analisis">Analisis Semanal CM</a>
+    <a href="#section-analisis" data-scroll-to="analisis">Análisis Cuadro de Merma</a>
     <a href="#section-recarga" data-scroll-to="recarga">Recarga ACO</a>
     <a href="#section-aco" data-scroll-to="aco">Fondo Físico ACO</a>
   </div>
@@ -530,35 +530,31 @@
          <section id="section-qr" class="money-section">
           <div class="aco-header">
               <h2>Generador QR</h2>
-              <h3>Posiciones</h3>
+              <h3>POSICIONES</h3>
           </div>
   
-          <div class="footer-container" style="padding-top: 15px; border-top: none;">
-              <!-- Selección de apartado -->
-              <div class="data-group" style="margin-bottom: 25px;">
-                  <label class="aco-label">Apartado</label>
-                  <select id="qr-apartado" class="aco-input-text">
-                      <option value="01">Señora</option>
-                      <option value="02">Caballero</option>
-                  </select>
-              </div>
+          <div class="footer-container" style="padding-top: 15px; border-top: none; display: flex; flex-direction: column; align-items: center; width: 100%;">
+              
+            <div style="display: flex; width: 100%; gap: 20px;"> <div class="data-group" style="flex: 1;">
+              <label class="aco-label">Apartado</label>
+              <select id="qr-apartado" class="aco-input-text">
+                  <option value="01">Señora</option>
+                  <option value="02">Caballero</option>
+              </select>
+          </div>
+          <div class="data-group" style="flex: 1;">
+              <label class="aco-label">Posición</label>
+              <input type="number" id="qr-posicion" class="aco-input-text" placeholder="Ej. 10 o 3231" min="1">
+          </div>
+      </div>
+
+      <div class="save-btn-container" style="width: 100%; margin-top: 15px; margin-bottom: 10px;"> <button id="btn-generar-qr" class="btn-guardar" style="width: 100%;">Generar Código</button>
+      </div>
+
+      <div id="qr-result-area" style="display: none; flex-direction: column; align-items: center; width: 100%; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.1);"> <div id="qrcode-display" style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);"></div>
+          <h4 id="qr-resultado-texto" style="font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; margin-top: 20px;"></h4>
+      </div>
   
-              <!-- Input de posición -->
-              <div class="data-group" style="margin-bottom: 30px;">
-                  <label class="aco-label">Posición</label>
-                  <input type="number" id="qr-posicion" class="aco-input-text" placeholder="256" min="1" max="999">
-              </div>
-  
-              <!-- Botón de generación -->
-              <div class="save-btn-container" style="margin-top: 10px; margin-bottom: 20px;">
-                  <button id="btn-generar-qr" class="btn-guardar" style="width: 100%;">Generar Código</button>
-              </div>
-  
-              <!-- Zona donde aparecerá el resultado -->
-              <div id="qr-result-area" style="display: flex; flex-direction: column; align-items: center; margin-top: 10px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); display: none;">
-                  <div id="qrcode-display" style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);"></div>
-                  <h4 id="qr-resultado-texto" style="color: #fff; font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 4px; margin-top: 20px;"></h4>
-              </div>
           </div>
       </section>
 
@@ -580,7 +576,7 @@
 
   <section id="section-analisis" class="analysis-section">
     <div class="analysis-header">
-        <h2>Analisis Semanal CM</h2>
+        <h2>Análisis Cuadro de Merma</h2>
         <div class="fecha-actual cm-date-today">DD / MM / YYYY</div>
     </div>
 
@@ -947,25 +943,31 @@
             }
 
             // Formatear a 3 dígitos y armar la clave
-            const posicionPadded = posicionInput.toString().padStart(3, '0');
-            const claveFinal = `00${posicionPadded}${apartadoSufijo}`;
+            // Formatear para que la posición siempre ocupe 5 espacios, rellenando con ceros a la izquierda
+            const posicionPadded = posicionInput.toString().padStart(5, '0');
+            const claveFinal = `${posicionPadded}${apartadoSufijo}`;
 
-            // Limpiar y mostrar el área de resultado
-            qrcodeDisplay.innerHTML = "";
+// Limpiar y mostrar el área de resultado
+qrcodeDisplay.innerHTML = "";
             qrResultArea.style.display = "flex"; 
 
-            // Generar QR
+            // Determinar el color del código QR
+            // "01" (Señora) = Rojo fuerte | "02" (Caballero) = Azul profundo
+            const colorQr = apartadoSufijo === "01" ? "#cc0000" : "#0055cc";
+
+            // Generar QR con el color seleccionado
             new QRCode(qrcodeDisplay, {
                 text: claveFinal,
                 width: 200,
                 height: 200,
-                colorDark : "#000000",
+                colorDark : colorQr,
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H
             });
 
-            // Mostrar el texto
+            // Mostrar el texto (también le aplicamos el color para que combine)
             qrResultadoTexto.innerText = claveFinal;
+            qrResultadoTexto.style.color = colorQr;
         });
     }
     /* === PANTALLA DE CARGA === */
@@ -1182,7 +1184,7 @@
             doc.setTextColor(255, 255, 255);
             doc.setFont("helvetica", "bold");
             doc.setFontSize(22);
-            doc.text("ANÁLISIS SEMANAL CUADRO DE MERMA", 105, 22, { align: "center" });
+            doc.text("ANÁLISIS CUADRO DE MERMA", 105, 22, { align: "center" });
             
             doc.setFontSize(12);
             doc.setFont("helvetica", "normal");
@@ -1243,7 +1245,7 @@
                 doc.text("Diseñado y desarrollado por Brandon Estrada.", 105, 288, { align: "center" });
             }
 
-            const nombreArchivo = `Analisis_Semanal_${dateToday.replace(/\//g, '-')}.pdf`;
+            const nombreArchivo = `Analisis_CuadroMerma_${dateToday.replace(/\//g, '-')}.pdf`;
             doc.save(nombreArchivo);
         });
     }
@@ -1293,7 +1295,7 @@
 
     // Fecha Pasada (-7 dias)
     const pastDate = new Date(hoy);
-    pastDate.setDate(hoy.getDate() - 7);
+    pastDate.setDate(hoy.getDate() - 14);
     const pd = String(pastDate.getDate()).padStart(2, '0');
     const pm = String(pastDate.getMonth() + 1).padStart(2, '0');
     const py = pastDate.getFullYear();
