@@ -21,6 +21,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> 
   
   <style>
+
+    /* Estilo para el input de fecha integrado en el texto */
+    .inline-date-input {
+        background: transparent; border: none; border-bottom: 1px dashed rgba(255,255,255,0.5); 
+        color: #fff; font-size: 14px; font-weight: 700; text-align: center; width: 35px; outline: none; transition: 0.3s;
+    }
+    .inline-date-input:focus { border-bottom-color: #fff; width: 45px; }
+    /* Quitar flechitas del input de número */
+    .inline-date-input::-webkit-outer-spin-button, .inline-date-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .inline-date-input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     /* =========================================
        PANTALLA DE CARGA (SPLASH SCREEN)
        ========================================= */
@@ -536,7 +546,7 @@
           <div class="footer-container" style="padding-top: 15px; border-top: none; display: flex; flex-direction: column; align-items: center; width: 100%;">
               
             <div style="display: flex; width: 100%; gap: 20px;"> <div class="data-group" style="flex: 1;">
-              <label class="aco-label">Sección</label>
+              <label class="aco-label">Apartado</label>
               <select id="qr-apartado" class="aco-input-text">
                   <option value="01">Señora</option>
                   <option value="02">Caballero</option>
@@ -577,7 +587,13 @@
   <section id="section-analisis" class="analysis-section">
     <div class="analysis-header">
         <h2>Análisis Cuadro de Merma</h2>
-        <div class="fecha-actual cm-date-today">DD / MM / YYYY</div>
+        <div style="text-align: center; margin-bottom: 30px;">
+          <div style="font-size: 13px; font-weight: 600; color: #ffffff; letter-spacing: 1px; text-transform: uppercase;">
+              <span id="cm-fecha-hoy"></span> VS - 
+              <input type="number" id="cm-dias-input" class="inline-date-input" value="14" min="1">
+              DÍAS. (<span id="cm-fecha-pasada"></span>)
+          </div>
+      </div>
     </div>
 
     <div class="tables-wrapper">
@@ -925,6 +941,53 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script>
 
+/* === LÓGICA DE FECHA DINÁMICA DE COMPARACIÓN === */
+const cmDiasInput = document.getElementById('cm-dias-input');
+    const cmDynamicDateText = document.getElementById('cm-dynamic-date-text');
+
+    function actualizarTextoComparacion() {
+        /* === LÓGICA DE FECHA DINÁMICA DE COMPARACIÓN (INLINE) === */
+    const cmDiasInput = document.getElementById('cm-dias-input');
+    const cmFechaHoy = document.getElementById('cm-fecha-hoy');
+    const cmFechaPasada = document.getElementById('cm-fecha-pasada');
+
+    function actualizarFechasInline() {
+        const dias = parseInt(cmDiasInput.value) || 0;
+        const hoy = new Date();
+        
+        // Formatear y pintar solo la fecha de hoy
+        const ddHoy = String(hoy.getDate()).padStart(2, '0');
+        const mmHoy = String(hoy.getMonth() + 1).padStart(2, '0');
+        const yyyyHoy = hoy.getFullYear();
+        cmFechaHoy.textContent = `${ddHoy}/${mmHoy}/${yyyyHoy}`;
+        
+        // Calcular, formatear y pintar solo la fecha pasada
+        const fechaPasada = new Date();
+        fechaPasada.setDate(hoy.getDate() - dias);
+        const ddPasada = String(fechaPasada.getDate()).padStart(2, '0');
+        const mmPasada = String(fechaPasada.getMonth() + 1).padStart(2, '0');
+        const yyyyPasada = fechaPasada.getFullYear();
+        cmFechaPasada.textContent = `${ddPasada}/${mmPasada}/${yyyyPasada}`;
+    }
+
+    if(cmDiasInput) {
+        cmDiasInput.addEventListener('input', actualizarFechasInline);
+        actualizarFechasInline();
+    }    }
+
+    if(cmDiasInput) {
+        cmDiasInput.addEventListener('input', actualizarTextoComparacion);
+        // Inicializar inmediatamente al cargar la página
+        actualizarTextoComparacion();
+    }
+
+
+
+
+
+
+
+
     /* === LÓGICA GENERADOR QR === */
     const btnGenerarQR = document.getElementById('btn-generar-qr');
     const qrcodeDisplay = document.getElementById('qrcode-display');
@@ -1179,19 +1242,29 @@ qrcodeDisplay.innerHTML = "";
         btnGuardarAnalisis.addEventListener("click", () => {
             const doc = new window.jspdf.jsPDF();
 
+            // 1. Encabezado del PDF
             doc.setFillColor(17, 17, 17);
-            doc.rect(0, 0, 210, 45, 'F');
+            doc.rect(0, 0, 210, 48, 'F'); // Altura ideal para el contenedor negro
             doc.setTextColor(255, 255, 255);
             doc.setFont("helvetica", "bold");
             doc.setFontSize(22);
-            doc.text("ANÁLISIS CUADRO DE MERMA", 105, 22, { align: "center" });
+            doc.text("ANÁLISIS CUADRO DE MERMA", 105, 18, { align: "center" });
             
-            doc.setFontSize(12);
+            doc.setFontSize(11);
             doc.setFont("helvetica", "normal");
+            doc.setTextColor(180, 180, 180);
             const dateToday = document.querySelector(".cm-date-today").textContent;
-            doc.text(`PULL&BEAR ANDARES 5344   |   Fecha: ${dateToday}`, 105, 32, { align: "center" });
+            doc.text(`PULL&BEAR ANDARES 5344`, 105, 28, { align: "center" });
 
-            let currentY = 55;
+// Armar la frase completa para el PDF uniendo los textos y el valor del input
+const diasVal = document.getElementById('cm-dias-input').value || 0;
+            const textoComparacion = `${document.getElementById('cm-fecha-hoy').textContent} VS -${diasVal} DÍAS. (${document.getElementById('cm-fecha-pasada').textContent})`;
+            
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(11);
+            doc.setTextColor(255, 255, 255); 
+            doc.text(textoComparacion, 105, 38, { align: "center" });
+            let currentY = 58; // Margen para empezar las tablas ordenadamente debajo del título
             const tablasHTML = document.querySelectorAll('#section-analisis .table-container');
 
             tablasHTML.forEach(contenedor => {
