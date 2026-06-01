@@ -22,6 +22,87 @@
   
   <style>
 
+  /* === ESTILOS DEL SWITCH VERANO / INVIERNO === */
+.season-switch-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px auto; /* Esto lo pega mucho más a los botones de abajo */
+}
+
+.season-switch {
+    position: relative;
+    display: inline-block;
+    width: 240px;
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 2px; /* Botón totalmente cuadrado */
+}
+
+.season-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.season-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    transition: 0.4s;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.season-slider:before {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 50%;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.15); /* Bloque gris/blanco translúcido neutro */
+    transition: 0.4s;
+    z-index: 1;
+}
+
+.label-verano, .label-invierno {
+    z-index: 2;
+    width: 50%;
+    text-align: center;
+    user-select: none;
+    transition: 0.3s;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Estado Normal (Verano activo) */
+.label-verano {
+    color: #ffffff;
+}
+
+.label-invierno {
+    color: rgba(255, 255, 255, 0.4); /* Letra tenue cuando no está activo */
+}
+
+/* Cuando el switch está activado (Modo Invierno) */
+input:checked + .season-slider:before {
+    transform: translateX(100%);
+}
+
+input:checked + .season-slider .label-verano {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+input:checked + .season-slider .label-invierno {
+    color: #ffffff;
+}
+
     /* Estilo para el input de fecha integrado en el texto */
     .inline-date-input {
         background: transparent; border: none; border-bottom: 1px dashed rgba(255,255,255,0.5); 
@@ -395,6 +476,38 @@
 
     /* Ajuste para opciones del Generador QR */
     select.aco-input-text option { background-color: #121212; color: #ffffff; }
+
+
+
+    /* === ANIMACIÓN DE HOJAS Y NIEVE === */
+.estacion-particula {
+    position: fixed;
+    top: -5%;
+    pointer-events: none;
+    z-index: 10000;
+    user-select: none;
+    animation: caerYMecer linear forwards;
+}
+
+@keyframes caerYMecer {
+    0% {
+        top: -5%;
+        transform: translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        top: 105%;
+        /* Hace que caigan balanceándose hacia un lado y rotando */
+        transform: translateX(100px) rotate(360deg);
+        opacity: 0;
+    }
+}
   </style>
 </head>
 <body>
@@ -428,7 +541,15 @@
   </div>
 
   <h1 id="materialc" class="title">Material De Camión</h1>
-
+  <div class="season-switch-container">
+    <label class="season-switch">
+      <input type="checkbox" id="season-toggle">
+      <span class="season-slider">
+        <span class="label-verano">Verano</span>
+        <span class="label-invierno">Invierno</span>
+      </span>
+    </label>
+  </div>
   <main class="container-xxl px-3 px-md-4">
     <div class="tabs-wrapper">
       <button class="tab-btn active" data-tab="total">Total</button>
@@ -603,8 +724,8 @@
                 <thead>
                     <tr>
                         <th>Tipo</th>
-                        <th class="cm-date-past">Past</th>
-                        <th class="cm-date-today">Today</th>
+                        <th class="th-fecha-pasada"></th>
+                        <th class="th-fecha-hoy"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -644,8 +765,8 @@
                     <thead>
                         <tr>
                             <th>Tipo</th>
-                            <th class="cm-date-past">Past</th>
-                            <th class="cm-date-today">Today</th>
+                            <th class="th-fecha-pasada"></th>
+                            <th class="th-fecha-hoy"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -674,8 +795,8 @@
                     <thead>
                         <tr>
                             <th>Tipo</th>
-                            <th class="cm-date-past">Past</th>
-                            <th class="cm-date-today">Today</th>
+                            <th class="th-fecha-pasada"></th>
+                        <th class="th-fecha-hoy"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -705,8 +826,8 @@
                 <thead>
                     <tr>
                         <th>Tipo</th>
-                        <th class="cm-date-past">Past</th>
-                        <th class="cm-date-today">Today</th>
+                        <th class="th-fecha-pasada"></th>
+                        <th class="th-fecha-hoy"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -752,8 +873,8 @@
                 <thead>
                     <tr>
                         <th>Tipo</th>
-                        <th class="cm-date-past">Past</th>
-                        <th class="cm-date-today">Today</th>
+                        <th class="th-fecha-pasada"></th>
+                        <th class="th-fecha-hoy"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -782,8 +903,8 @@
                 <thead>
                     <tr>
                         <th>Tipo</th>
-                        <th class="cm-date-past">Past</th>
-                        <th class="cm-date-today">Today</th>
+                        <th class="th-fecha-pasada"></th>
+                        <th class="th-fecha-hoy"></th>  
                     </tr>
                 </thead>
                 <tbody>
@@ -812,8 +933,8 @@
                 <thead>
                     <tr>
                         <th>Tipo</th>
-                        <th class="cm-date-past">Past</th>
-                        <th class="cm-date-today">Today</th>
+                        <th class="th-fecha-pasada"></th>
+                        <th class="th-fecha-hoy"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -941,13 +1062,83 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script>
 
-/* === LÓGICA DE FECHA DINÁMICA DE COMPARACIÓN === */
-const cmDiasInput = document.getElementById('cm-dias-input');
-    const cmDynamicDateText = document.getElementById('cm-dynamic-date-text');
 
-    function actualizarTextoComparacion() {
-        /* === LÓGICA DE FECHA DINÁMICA DE COMPARACIÓN (INLINE) === */
-    const cmDiasInput = document.getElementById('cm-dias-input');
+
+
+
+
+
+
+
+
+
+// Escuchador para el cambio de estación (Verano / Invierno)
+// Escuchador para el cambio de estación (Verano / Invierno) con Animación
+const seasonToggle = document.getElementById('season-toggle');
+if (seasonToggle) {
+    seasonToggle.addEventListener('change', () => {
+        // 1. Forzar el recálculo de las tablas del camión
+        document.querySelectorAll('.calc-input').forEach(input => {
+            if(input.value) { 
+                input.dispatchEvent(new Event('input'));
+            }
+        });
+        
+        // 2. Disparar la animación de partículas
+        lanzarEfectoEstacion();
+    });
+}
+
+// Función encargada de crear la lluvia de hojas o nieve
+function lanzarEfectoEstacion() {
+    const esInvierno = document.getElementById('season-toggle').checked;
+    
+    // Limpiar partículas viejas si el usuario clickea muy rápido
+    document.querySelectorAll('.estacion-particula').forEach(p => p.remove());
+    
+    // Definimos los símbolos a usar según la temporada
+    const simbolos = esInvierno ? ['❄', '❅', '❆', '•'] : ['🍂', '🍁', '🍃'];
+    const cantidad = 30; // Número de elementos que caerán
+
+    for (let i = 0; i < cantidad; i++) {
+        const particula = document.createElement('div');
+        particula.className = 'estacion-particula';
+        
+        // Selecciona un símbolo al azar de la lista
+        particula.innerText = simbolos[Math.floor(Math.random() * simbolos.length)];
+        
+        // Generamos variaciones aleatorias para que se vea natural y orgánico
+        const posicionIzquierda = Math.random() * 100; // En qué parte horizontal de la pantalla inicia
+        const duracion = Math.random() * 3 + 2.5;     // Tiempo en caer (entre 2.5 y 5.5 segundos)
+        const retraso = Math.random() * 1.5;          // Retraso para que no caigan todas al mismo tiempo
+        const tamano = esInvierno ? (Math.random() * 14 + 10) : (Math.random() * 18 + 14); // Tamaño en px
+        
+        // Aplicamos los estilos aleatorios directamente
+        particula.style.left = `${posicionIzquierda}%`;
+        particula.style.animationDuration = `${duracion}s`;
+        particula.style.animationDelay = `${retraso}s`;
+        particula.style.fontSize = `${tamano}px`;
+        
+        // Si es invierno, le damos un sutil brillo blanco para que resalte en el fondo oscuro
+        if (esInvierno) {
+            particula.style.color = '#ffffff';
+            particula.style.textShadow = '0 0 5px rgba(255,255,255,0.6)';
+        }
+
+        document.body.appendChild(particula);
+
+        // Al terminar su animación, el navegador la elimina automáticamente para no consumir memoria
+        particula.addEventListener('animationend', () => {
+            particula.remove();
+        });
+    }
+}
+
+
+
+
+/* === LÓGICA DE FECHA DINÁMICA DE COMPARACIÓN (INLINE) === */
+const cmDiasInput = document.getElementById('cm-dias-input');
     const cmFechaHoy = document.getElementById('cm-fecha-hoy');
     const cmFechaPasada = document.getElementById('cm-fecha-pasada');
 
@@ -955,30 +1146,34 @@ const cmDiasInput = document.getElementById('cm-dias-input');
         const dias = parseInt(cmDiasInput.value) || 0;
         const hoy = new Date();
         
-        // Formatear y pintar solo la fecha de hoy
+        // 1. Calcular y formatear la fecha de hoy
         const ddHoy = String(hoy.getDate()).padStart(2, '0');
         const mmHoy = String(hoy.getMonth() + 1).padStart(2, '0');
         const yyyyHoy = hoy.getFullYear();
-        cmFechaHoy.textContent = `${ddHoy}/${mmHoy}/${yyyyHoy}`;
+        const fechaHoyFormateada = `${ddHoy}/${mmHoy}/${yyyyHoy}`;
+        cmFechaHoy.textContent = fechaHoyFormateada;
         
-        // Calcular, formatear y pintar solo la fecha pasada
+        // 2. Calcular y formatear la fecha pasada
         const fechaPasada = new Date();
         fechaPasada.setDate(hoy.getDate() - dias);
         const ddPasada = String(fechaPasada.getDate()).padStart(2, '0');
         const mmPasada = String(fechaPasada.getMonth() + 1).padStart(2, '0');
         const yyyyPasada = fechaPasada.getFullYear();
-        cmFechaPasada.textContent = `${ddPasada}/${mmPasada}/${yyyyPasada}`;
+        const fechaPasadaFormateada = `${ddPasada}/${mmPasada}/${yyyyPasada}`;
+        cmFechaPasada.textContent = fechaPasadaFormateada;
+
+        // 3. ACTUALIZAR LOS ENCABEZADOS DE TODAS LAS TABLAS
+        document.querySelectorAll('.th-fecha-pasada').forEach(th => {
+            th.textContent = fechaPasadaFormateada;
+        });
+        document.querySelectorAll('.th-fecha-hoy').forEach(th => {
+            th.textContent = fechaHoyFormateada;
+        });
     }
 
     if(cmDiasInput) {
         cmDiasInput.addEventListener('input', actualizarFechasInline);
         actualizarFechasInline();
-    }    }
-
-    if(cmDiasInput) {
-        cmDiasInput.addEventListener('input', actualizarTextoComparacion);
-        // Inicializar inmediatamente al cargar la página
-        actualizarTextoComparacion();
     }
 
 
@@ -1116,11 +1311,28 @@ qrcodeDisplay.innerHTML = "";
 
     // Fórmulas matemáticas
     function redondear(valor){ return Math.round(Number(valor)); }
+
+
     function calcularSenora(unidades){
-      const u = Number(unidades) || 0; return {buffer:redondear((u*0.7)/35/5), piso:redondear((u*0.3)/35/4)};
+      const switchEstacion = document.getElementById('season-toggle');
+      const divisorEstacion = (switchEstacion && switchEstacion.checked) ? 25 : 35;
+      
+      const u = Number(unidades) || 0; 
+      return {
+          buffer: redondear((u * 0.7) / divisorEstacion / 5), 
+          piso: redondear((u * 0.3) / divisorEstacion / 4)
+      };
     }
+    
     function calcularCaballero(unidades){
-      const u = Number(unidades) || 0; return {buffer:redondear((u*0.7)/35/5), piso:redondear((u*0.3)/35/4)};
+      const switchEstacion = document.getElementById('season-toggle');
+      const divisorEstacion = (switchEstacion && switchEstacion.checked) ? 20 : 30;
+      
+      const u = Number(unidades) || 0; 
+      return {
+          buffer: redondear((u * 0.7) / divisorEstacion / 5), 
+          piso: redondear((u * 0.3) / divisorEstacion / 4)
+      };
     }
 
     // Actualiza los números visuales en pantalla
@@ -1179,7 +1391,8 @@ qrcodeDisplay.innerHTML = "";
             
             doc.setFontSize(12);
             doc.setFont("helvetica", "normal");
-            const dateStr = document.querySelector(".cm-date-today").textContent; 
+            // CÓDIGO CORREGIDO:
+const dateStr = document.getElementById("cm-fecha-hoy") ? document.getElementById("cm-fecha-hoy").textContent : new Date().toLocaleDateString('es-MX');
             doc.text(`PULL&BEAR ANDARES 5344   |   Fecha: ${dateStr}`, 105, 32, { align: "center" });
 
             doc.setTextColor(0, 0, 0); 
@@ -1253,7 +1466,8 @@ qrcodeDisplay.innerHTML = "";
             doc.setFontSize(11);
             doc.setFont("helvetica", "normal");
             doc.setTextColor(180, 180, 180);
-            const dateToday = document.querySelector(".cm-date-today").textContent;
+           // CÓDIGO CORREGIDO:
+const dateToday = document.getElementById("cm-fecha-hoy") ? document.getElementById("cm-fecha-hoy").textContent : new Date().toLocaleDateString('es-MX');
             doc.text(`PULL&BEAR ANDARES 5344`, 105, 28, { align: "center" });
 
 // Armar la frase completa para el PDF uniendo los textos y el valor del input
